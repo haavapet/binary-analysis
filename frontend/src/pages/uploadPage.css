@@ -1,0 +1,69 @@
+.drag-image {
+  border: 1px dashed #eee;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.show-file {
+  border: 1px dashed #eee;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  display: inline-block;
+  color: #eee;
+  height: 90%;
+  width: 90%;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.drag-image-active {
+  background-color: #aaa;
+}
+
+.drag-image i {
+  color: #eee;
+  font-size: 60px;
+  padding: 20px;
+}
+
+.drag-image h6 {
+  font-size: 20px;
+  font-weight: 300;
+  color: #eee;
+}
+.drag-image span {
+  font-size: 14px;
+  font-weight: 300;
+  color: #eee;
+  margin: 10px 0 40px 0;
+}
+
+.drag-image .btn {
+  background-color: #eee;
+  color: #424242;
+}
+
+.drag-image .btn:hover {
+  background-color: #aaa;
+  color: #424242;
+}
+
+.drag-image .btn:focus {
+  background-color: #999 !important;
+  color: #424242;
+}
