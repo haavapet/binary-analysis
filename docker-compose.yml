@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  frontend:
+    image: frontend
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: "localhost:5000"
+    ports:
+      - "127.0.0.1:8000:3000"
+
+  backend:
+    image: backend
+    build: ./backend
+    ports:
+      - "127.0.0.1:5000:80"
