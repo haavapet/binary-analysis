@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Col,
-  Card,
-  OverlayTrigger,
-  Tooltip,
-  FloatingLabel,
-} from "react-bootstrap";
+import { Form, Col, Card, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import PageButton from "../components/button";
 
@@ -90,7 +83,9 @@ const FormPage = ({ setFormData, formData, incPage, postForm }) => {
                     })
                   }
                 >
-                  <option value="">Choose endiannes</option>
+                  <option value="" hidden>
+                    Choose endiannes
+                  </option>
                   <option value="big">Big</option>
                   <option value="little">Little</option>
                 </Form.Control>

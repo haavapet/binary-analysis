@@ -22,7 +22,7 @@ const App = () => {
     pcIncPerInstr: 2,
     nrCandidates: 4,
     callCandidateRange: [3, 7],
-    retCandidateRange: [5, 15],
+    retCandidateRange: [0, 10],
     returnToFunctionPrologueDistance: 3,
   });
   const [file, setFile] = useState(null);

@@ -28,8 +28,8 @@ class Base():
     pcIncPerInstr = 2 # how much PC increments per instruction, usually byter per instruction, but not sure
     endiannes = "little"
     nrCandidates = 4
-    callCandidateRange = [3, 7]
-    retCandidateRange = [5, 15]
+    callCandidateRange = [0, 7]
+    retCandidateRange = [0, 10]
     returnToFunctionPrologueDistance = 3
 
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
         graph = create_graphs(instructions, call, ret, form.pcIncPerInstr, form.pcOffset, step)
         candidates_with_graph += [{"probability": prob, "ret_opcode": ret, "call_opcode": call, "graph": graph}]
     
-    print({"instructions": instruction_values, "cfgs": candidates_with_graph})
+    print(candidates_with_graph)
     # TODO, after having found function edges
     #       Find common function prologue, and if a function has multiple returns, attempt to split into multiple functions
 

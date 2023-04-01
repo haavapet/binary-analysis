@@ -14,7 +14,7 @@ def find_best_candidates(instructions, pc_inc_per_instruction, pc_offset, nr_can
     # TODO INSERT CALL_CANDIDATE_RANGE
     for call_candidate, counter in valid_call_candidates:
         # TODO insert RETURN TO FUNCTION PROLOGUE DISTANCE
-        for step in range(1, 3): # distance from return to prologue. I.e if ret is the instruction above call operand, distance 1 will give hits
+        for step in range(1, return_to_function_prologue_distance): # distance from return to prologue. I.e if ret is the instruction above call operand, distance 1 will give hits
             valid_operand = 0
             for e in instructions:
                 if e.call_opcode == call_candidate:
