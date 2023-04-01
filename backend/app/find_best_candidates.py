@@ -29,7 +29,7 @@ def find_best_candidates(instructions, pc_inc_per_instruction, pc_offset, nr_can
             for ret_cand, hits in hit_map.items():
                 # some random "probability" value. normalized between 0 and 1   
                 probability_value = (2 * (hits / counter) + (valid_operand / counter)) / 3
-                if ret_cand in valid_ret_candidates:
+                if ret_cand in valid_ret_candidates and ret_cand != call_candidate:
                     if len(best_hits) <= nr_candidates:
                         heapq.heappush(best_hits, (probability_value, hits, counter, call_candidate, ret_cand, step))
                     else:

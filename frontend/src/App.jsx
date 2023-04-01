@@ -6,6 +6,7 @@ import FormPage from "./pages/formPage";
 import UploadPage from "./pages/uploadPage";
 import IntroPage from "./pages/introPage";
 import ProgressBar from "./components/progressBar";
+import MainCard from "./components/mainCard";
 
 import "./App.css";
 
@@ -35,7 +36,7 @@ const App = () => {
     postFormData.append("data", JSON.stringify(formData));
     postFormData.append("file", file);
 
-    return await fetch(
+    let result = await fetch(
       `http://${process.env.REACT_APP_BACKEND_URL || "localhost:8000"}/api`,
       {
         method: "POST",
@@ -51,6 +52,8 @@ const App = () => {
         setToastMessage("Network error: " + error);
         return false;
       });
+
+    if (result) setPage(page + 1);
   };
 
   return (
@@ -59,26 +62,24 @@ const App = () => {
         <ProgressBar page={page} />
       </Row>
       <Row className="flex-grow-1">
-        {page == 0 && <IntroPage incPage={(x) => setPage(page + x)} />}
-        {page == 1 && (
-          <UploadPage
-            setFile={setFile}
-            file={file}
-            incPage={(x) => setPage(page + x)}
-            setToastMessage={setToastMessage}
-          />
-        )}
-        {page == 2 && (
-          <FormPage
-            setFormData={setFormData}
-            formData={formData}
-            incPage={(x) => setPage(page + x)}
-            postForm={postForm}
-          />
-        )}
-        {page == 3 && graphData && (
-          <GraphPage graphs={graphData} incPage={(x) => setPage(page + x)} />
-        )}
+        <MainCard page={page} file={file} incPage={(x) => setPage(page + x)}>
+          {page == 0 && <IntroPage />}
+          {page == 1 && (
+            <UploadPage
+              setFile={setFile}
+              file={file}
+              setToastMessage={setToastMessage}
+            />
+          )}
+          {page == 2 && (
+            <FormPage
+              setFormData={setFormData}
+              formData={formData}
+              postForm={postForm}
+            />
+          )}
+          {page == 3 && graphData && <GraphPage graphs={graphData} />}
+        </MainCard>
       </Row>
       <ToastContainer className="p-3" position="bottom-center">
         <Toast

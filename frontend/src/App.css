@@ -9,6 +9,7 @@ html,
 .card {
   border: 1px solid black;
   background-color: #424242 !important;
+  color: white;
   justify-content: center;
   align-items: center;
   width: 100%;
