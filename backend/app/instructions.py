@@ -2,12 +2,12 @@
 class Instruction():
     call_instruction = None # TODO rename this
     function_block = None
-    # TODO: opcode may not be first bits, and operand is hardcoded, each needs start and stop index bits
+    # TODO: opcode may not be first bits, and we are assuming that call instruction only consists of opcode and operand
     def __init__(self, instruction, instr_len, ret_len, call_len):
         self.value = instruction
         self.ret_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - ret_len))
         self.call_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - call_len))
-        self.call_operand = instruction & (0x0FFF)
+        self.call_operand = instruction & (0xFFFFFFFFFFFFFFFF >> (64-instr_len+call_len))
 
 
 # split bytestream into instructions

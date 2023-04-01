@@ -2,7 +2,6 @@ from fastapi import FastAPI, status, Form, File, Depends
 from pydantic import BaseModel, ValidationError
 from fastapi.exceptions import HTTPException
 from fastapi.encoders import jsonable_encoder
-
 from fastapi.middleware.cors import CORSMiddleware
 
 from instructions import Instruction, extract_instruction
@@ -37,6 +36,7 @@ class Base(BaseModel):
     endiannes: str
     nrCandidates: int
     callCandidateRange: list
+    retCandidateRange: list
     returnToFunctionPrologueDistance: int
 
 
@@ -56,11 +56,8 @@ async def root(form: Base = Depends(checker), file: bytes = File(...)):
     instruction_values = extract_instruction(file[form.fileOffset:form.fileOffsetEnd], form.endiannes, form.instructionLength)
     instructions = [Instruction(e, form.instructionLength, form.retOpcodeLength, form.callOpcodeLength) for e in instruction_values]
 
-    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates)
+    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates, form.callCandidateRange, form.retCandidateRange)
 
-    # Line too long for oneliner :(
-    # candidates_with_graph = [{"probability": prob, "ret_opcode": ret, "call_opcode": call, "graphs": create_graphs(instructions, call, ret, step)} for prob, _, _, call, ret, step in candidates]
-    
     candidates_with_graph = []
     for prob, _, _, call, ret, step in candidates:
         graph = create_graphs(instructions, call, ret, form.pcIncPerInstr, form.pcOffset, step)

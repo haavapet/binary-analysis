@@ -28,7 +28,8 @@ class Base():
     pcIncPerInstr = 2 # how much PC increments per instruction, usually byter per instruction, but not sure
     endiannes = "little"
     nrCandidates = 4
-    callCandidateRange = [0, 7]
+    callCandidateRange = [3, 7]
+    retCandidateRange = [5, 15]
     returnToFunctionPrologueDistance = 3
 
 
@@ -44,7 +45,7 @@ if __name__ == "__main__":
 
     instruction_values = extract_instruction(binary[form.fileOffset:form.fileOffsetEnd], form.endiannes, form.instructionLength)
     instructions = [Instruction(e, form.instructionLength, form.retOpcodeLength, form.callOpcodeLength) for e in instruction_values]
-    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates)
+    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates, form.callCandidateRange, form.retCandidateRange)
 
     # Line too long for oneliner :(
     # candidates_with_graph = [{"probability": prob, "ret_opcode": ret, "call_opcode": call, "graphs": create_graphs(instructions, call, ret, step)} for prob, _, _, call, ret, step in candidates]
