@@ -13,14 +13,13 @@ const App = () => {
   const [graphData, setGraphData] = useState(null);
   const [formData, setFormData] = useState({
     instructionLength: null,
+    endiannes: "little",
     retOpcodeLength: 16,
     callOpcodeLength: 4,
     fileOffset: 0x0,
     fileOffsetEnd: 1072,
     pcOffset: 0x200,
-    instrLength: 16,
     pcIncPerInstr: 2,
-    endiannes: "little",
     nrCandidates: 4,
     callCandidateRange: [3, 7],
     retCandidateRange: [5, 15],

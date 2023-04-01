@@ -11,7 +11,7 @@ const UploadPage = ({ setFile, file, incPage, setToastMessage }) => {
     <>
       <PageButton left onClick={() => incPage(-1)} />
       <Col xs={8} className="d-flex">
-        <Card className="mx-auto" style={{ borderRadius: "3%" }}>
+        <Card className="mx-auto">
           <UploadFile
             setFile={setFile}
             file={file}

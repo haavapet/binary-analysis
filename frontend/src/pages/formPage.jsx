@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Form, Col, Card } from "react-bootstrap";
+import {
+  Form,
+  Col,
+  Card,
+  OverlayTrigger,
+  Tooltip,
+  FloatingLabel,
+} from "react-bootstrap";
 
 import PageButton from "../components/button";
 
@@ -23,27 +30,72 @@ const FormPage = ({ setFormData, formData, incPage, postForm }) => {
     <>
       <PageButton left onClick={() => incPage(-1)} />
       <Col xs={8} className="d-flex">
-        <Card className="mx-auto" style={{ borderRadius: "3%" }}>
+        <Card className="mx-auto">
           <Form
             id={"binaryInfoForm"}
-            style={{ color: "white" }}
             noValidate
             validated={validated}
             onSubmit={handleSubmit}
+            className="row"
+            style={{ width: "80%" }}
           >
-            <Form.Group className="mb-3" controlId="formGroupInstrLength">
-              <Form.Label>Instruction Length</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                placeholder="Enter instruction length"
-                onChange={(e) =>
-                  setFormData((prev) => {
-                    return { ...prev, instructionLength: e.target.value };
-                  })
-                }
-              />
-            </Form.Group>
+            <Col>
+              <Form.Group className="mb-3" controlId="formGroupInstrLength">
+                <Form.Label style={{ color: "white" }}>
+                  Instruction Length&nbsp;
+                </Form.Label>
+                <OverlayTrigger
+                  placement={"right"}
+                  overlay={<Tooltip>Length of instruction in bits</Tooltip>}
+                >
+                  <i
+                    className="fa fa-question-circle"
+                    style={{ color: "white" }}
+                  />
+                </OverlayTrigger>
+                <Form.Control
+                  type="number"
+                  min={0}
+                  max={64}
+                  required
+                  placeholder="Enter instruction length"
+                  onChange={(e) =>
+                    setFormData((prev) => {
+                      return { ...prev, instructionLength: e.target.value };
+                    })
+                  }
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className="mb-3" controlId="formGroupEndiannes">
+                <Form.Label style={{ color: "white" }}>
+                  Endiannes&nbsp;{" "}
+                </Form.Label>
+                <OverlayTrigger
+                  placement={"right"}
+                  overlay={<Tooltip>Big vs little endiannes</Tooltip>}
+                >
+                  <i
+                    className="fa fa-question-circle"
+                    style={{ color: "white" }}
+                  />
+                </OverlayTrigger>
+                <Form.Control
+                  as="select"
+                  required
+                  onSelect={(e) =>
+                    setFormData((prev) => {
+                      return { ...prev, endiannes: e.target.value };
+                    })
+                  }
+                >
+                  <option value="">Choose endiannes</option>
+                  <option value="big">Big</option>
+                  <option value="little">Little</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
           </Form>
         </Card>
       </Col>

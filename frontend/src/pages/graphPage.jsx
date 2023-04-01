@@ -34,7 +34,7 @@ const GraphPage = ({ graphs, incPage }) => {
 
       <PageButton left onClick={() => incPage(-1)} />
       <Col xs={8} className="d-flex">
-        <Card className="mx-auto" style={{ borderRadius: "3%" }}>
+        <Card className="mx-auto">
           <Row style={{ textAlign: "center", color: "white" }}>
             <h2>Graph {selectedGraph + 1}</h2>
           </Row>
