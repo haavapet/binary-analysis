@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     instruction_values = extract_instruction(binary[form.fileOffset:form.fileOffsetEnd], form.endiannes, form.instructionLength)
     instructions = [Instruction(e, form.instructionLength, form.retOpcodeLength, form.callOpcodeLength) for e in instruction_values]
-    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates, form.callCandidateRange, form.retCandidateRange)
+    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates, form.callCandidateRange, form.retCandidateRange, form.returnToFunctionPrologueDistance)
 
     # Line too long for oneliner :(
     # candidates_with_graph = [{"probability": prob, "ret_opcode": ret, "call_opcode": call, "graphs": create_graphs(instructions, call, ret, step)} for prob, _, _, call, ret, step in candidates]

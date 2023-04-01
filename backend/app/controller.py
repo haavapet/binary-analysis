@@ -56,7 +56,7 @@ async def root(form: Base = Depends(checker), file: bytes = File(...)):
     instruction_values = extract_instruction(file[form.fileOffset:form.fileOffsetEnd], form.endiannes, form.instructionLength)
     instructions = [Instruction(e, form.instructionLength, form.retOpcodeLength, form.callOpcodeLength) for e in instruction_values]
 
-    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates, form.callCandidateRange, form.retCandidateRange)
+    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates, form.callCandidateRange, form.retCandidateRange, form.returnToFunctionPrologueDistance)
 
     candidates_with_graph = []
     for prob, _, _, call, ret, step in candidates:

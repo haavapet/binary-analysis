@@ -2,7 +2,7 @@ from collections import Counter
 from constants import *
 import heapq
 
-def find_best_candidates(instructions, pc_inc_per_instruction, pc_offset, nr_candidates, call_candidate_range, ret_candidate_range):
+def find_best_candidates(instructions, pc_inc_per_instruction, pc_offset, nr_candidates, call_candidate_range, ret_candidate_range, return_to_function_prologue_distance):
     valid_call_candidates = Counter([e.call_opcode for e in instructions]).most_common(call_candidate_range[1])[call_candidate_range[0]:]
     valid_ret_candidates = [e for e, _ in Counter([e.ret_opcode for e in instructions]).most_common(ret_candidate_range[1])[ret_candidate_range[0]:]]
 
