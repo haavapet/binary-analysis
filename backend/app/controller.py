@@ -1,12 +1,13 @@
-from fastapi import FastAPI, status, Form, UploadFile, File, Depends, Request
+from fastapi import FastAPI, status, Form, File, Depends
 from pydantic import BaseModel, ValidationError
 from fastapi.exceptions import HTTPException
 from fastapi.encoders import jsonable_encoder
 
 from fastapi.middleware.cors import CORSMiddleware
 
-from program import find_hits, create_graph
 from instructions import Instruction, extract_instruction
+from create_graphs import create_graphs
+from find_best_candidates import find_best_candidates
 
 app = FastAPI()
 
@@ -27,6 +28,16 @@ app.add_middleware(
 
 class Base(BaseModel):
     instructionLength: int
+    retOpcodeLength: int
+    callOpcodeLength: int
+    fileOffset: int
+    fileOffsetEnd: int
+    pcOffset: int
+    pcIncPerInstr: int
+    endiannes: str
+    nrCandidates: int
+    callCandidateRange: list
+    returnToFunctionPrologueDistance: int
 
 
 def checker(data: str = Form(...)):
@@ -40,22 +51,19 @@ def checker(data: str = Form(...)):
 
     return model
 
-@app.get("/")
-async def test():
-    return "test"
-
 @app.post("/api")
 async def root(form: Base = Depends(checker), file: bytes = File(...)):
+    instruction_values = extract_instruction(file[form.fileOffset:form.fileOffsetEnd], form.endiannes, form.instructionLength)
+    instructions = [Instruction(e, form.instructionLength, form.retOpcodeLength, form.callOpcodeLength) for e in instruction_values]
 
-    # TODO: make docker stuff
-    result = {"cfgs": []}
-    instr2 = [Instruction(e, 16, 4) for e in extract_instruction(file, "big", form.instructionLength)[:536]] # slicing because end of binary is sprites
-    result["instructions"] = [e.value for e in instr2]
-    candidates = find_hits(instr2, 16, 4)
+    candidates = find_best_candidates(instructions, form.pcIncPerInstr, form.pcOffset, form.nrCandidates)
 
-    for prob, hits, nr_call_opcodes, call, ret, step in candidates:
-        #print(f"prob: {prob}, hits: {hits}, nr_calls: {nr_call_opcodes}. call opcode: {call}, ret opcode: {ret}")
-        graph = create_graph(instr2, call, ret, step)
-        result["cfgs"].append({"probability": prob, "ret_opcode": ret, "call_opcode": call, "graph": graph})
-
-    return result
+    # Line too long for oneliner :(
+    # candidates_with_graph = [{"probability": prob, "ret_opcode": ret, "call_opcode": call, "graphs": create_graphs(instructions, call, ret, step)} for prob, _, _, call, ret, step in candidates]
+    
+    candidates_with_graph = []
+    for prob, _, _, call, ret, step in candidates:
+        graph = create_graphs(instructions, call, ret, form.pcIncPerInstr, form.pcOffset, step)
+        candidates_with_graph += [{"probability": prob, "ret_opcode": ret, "call_opcode": call, "graph": graph}]
+    
+    return {"instructions": instruction_values, "cfgs": candidates_with_graph}

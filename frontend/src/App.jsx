@@ -13,6 +13,17 @@ const App = () => {
   const [graphData, setGraphData] = useState(null);
   const [formData, setFormData] = useState({
     instructionLength: null,
+    retOpcodeLength: 16,
+    callOpcodeLength: 4,
+    fileOffset: 0x0,
+    fileOffsetEnd: 1072,
+    pcOffset: 0x200,
+    instrLength: 16,
+    pcIncPerInstr: 2,
+    endiannes: "little",
+    nrCandidates: 4,
+    callCandidateRange: [0, 7],
+    returnToFunctionPrologueDistance: 3,
   });
   const [file, setFile] = useState(null);
   const [page, setPage] = useState(0);

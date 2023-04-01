@@ -1,13 +1,12 @@
-from constants import INSTR_LENGTH
 
 class Instruction():
     call_instruction = None # TODO rename this
     function_block = None
     # TODO: opcode may not be first bits, and operand is hardcoded, each needs start and stop index bits
-    def __init__(self, instruction, ret_len, call_len):
+    def __init__(self, instruction, instr_len, ret_len, call_len):
         self.value = instruction
-        self.ret_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-INSTR_LENGTH)) << (INSTR_LENGTH - ret_len))
-        self.call_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-INSTR_LENGTH)) << (INSTR_LENGTH - call_len))
+        self.ret_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - ret_len))
+        self.call_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - call_len))
         self.call_operand = instruction & (0x0FFF)
 
 
