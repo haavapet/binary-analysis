@@ -15,16 +15,16 @@ const App = () => {
   const [formData, setFormData] = useState({
     instructionLength: null,
     endiannes: "little",
-    retOpcodeLength: 16,
-    callOpcodeLength: 4,
+    retOpcodeLength: null,
+    callOpcodeLength: null,
     fileOffset: 0x0,
     fileOffsetEnd: 1072,
     pcOffset: 0x200,
     pcIncPerInstr: 2,
-    nrCandidates: 4,
     callCandidateRange: [3, 7],
     retCandidateRange: [0, 10],
     returnToFunctionPrologueDistance: 3,
+    nrCandidates: 4,
   });
   const [file, setFile] = useState(null);
   const [page, setPage] = useState(0);
