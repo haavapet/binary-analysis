@@ -3,10 +3,10 @@ import { Col, Card } from "react-bootstrap";
 
 import PageButton from "../components/button";
 
-const MainCard = ({ children, page, file, incPage }) => {
+const MainCard = ({ children, page, file, setPage }) => {
   return (
     <>
-      <PageButton left onClick={() => incPage(-1)} hidden={page == 0} />
+      <PageButton left onClick={() => setPage(page - 1)} hidden={page == 0} />
       <Col xs={8} className="d-flex">
         <Card className="mx-auto">{children}</Card>
       </Col>
@@ -15,7 +15,7 @@ const MainCard = ({ children, page, file, incPage }) => {
       ) : (
         <PageButton
           right
-          onClick={() => incPage(1)}
+          onClick={() => setPage(page + 1)}
           disabled={page == 1 && file == null}
           hidden={page == 3}
         />

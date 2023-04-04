@@ -17,14 +17,14 @@ const App = () => {
     endiannes: "little",
     retOpcodeLength: null,
     callOpcodeLength: null,
-    fileOffset: 0x0,
-    fileOffsetEnd: 1072,
-    pcOffset: 0x200,
-    pcIncPerInstr: 2,
-    callCandidateRange: [3, 7],
-    retCandidateRange: [0, 10],
-    returnToFunctionPrologueDistance: 3,
-    nrCandidates: 4,
+    fileOffset: null,
+    fileOffsetEnd: null,
+    pcOffset: null,
+    pcIncPerInstr: null,
+    callCandidateRange: [null, null],
+    retCandidateRange: [null, null],
+    returnToFunctionPrologueDistance: null,
+    nrCandidates: null,
   });
   const [file, setFile] = useState(null);
   const [page, setPage] = useState(0);
@@ -62,7 +62,7 @@ const App = () => {
         <ProgressBar page={page} />
       </Row>
       <Row className="flex-grow-1">
-        <MainCard page={page} file={file} incPage={(x) => setPage(page + x)}>
+        <MainCard page={page} file={file} setPage={setPage}>
           {page == 0 && <IntroPage />}
           {page == 1 && (
             <UploadPage
