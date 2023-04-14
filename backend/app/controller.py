@@ -53,7 +53,6 @@ def checker(data: str = Form(...)):
 
 @app.post("/api")
 async def root(form: Base = Depends(checker), file: bytes = File(...)):
-    print(form)
     instruction_values = extract_instruction(file[form.fileOffset:form.fileOffsetEnd], form.endiannes, form.instructionLength)
     instructions = [Instruction(e, form.instructionLength, form.retOpcodeLength, form.callOpcodeLength) for e in instruction_values]
 
