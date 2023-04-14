@@ -72,7 +72,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
             <Form.Control
               as="select"
               required
-              onSelect={(e) =>
+              onChange={(e) =>
                 setFormData((prev) => {
                   return { ...prev, endiannes: e.target.value };
                 })
