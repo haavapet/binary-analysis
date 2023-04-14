@@ -32,7 +32,7 @@ def _extract_instruction_big_endian(bin, instr_length):
         instruction_bits = list(bin[start:end + 1])
 
         # negate the last bits of last byte if not part of instruction
-        instruction_bits[0] &= 0xFF << ((8 - end_offset) & 0x00FF)
+        instruction_bits[0] &= 0xFF << ((8 - end_offset) & 0xFF)
         # negate the first bits of the first byte if not part of instruction
         instruction_bits[-1] &= 0xFF >> start_offset
 
