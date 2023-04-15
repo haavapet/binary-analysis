@@ -8,5 +8,6 @@ backend/app/test.py
 
 # backend caches
 /backend/app/__pycache__
+/backend/tests/__pycache__
 /.pytest_cache
 /.ruff_cache
