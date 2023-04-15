@@ -1,7 +1,12 @@
+# my files in project
 /datasets
 /tekst
-
-/frontend/node_modules
-/backend/app/__pycache__
-
 backend/app/test.py
+
+# frontend node modules
+/frontend/node_modules
+
+# backend caches
+/backend/app/__pycache__
+/.pytest_cache
+/.ruff_cache
