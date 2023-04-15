@@ -1,5 +1,4 @@
 from collections import Counter
-from constants import *
 import heapq
 
 def find_best_candidates(instructions, pc_inc_per_instruction, pc_offset, nr_candidates, call_candidate_range, ret_candidate_range, return_to_function_prologue_distance):
