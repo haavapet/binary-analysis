@@ -7,8 +7,7 @@ backend/app/test.py
 /frontend/node_modules
 
 # backend caches
-/backend/app/__pycache__
-/backend/tests/__pycache__
+backend/**/__pycache__/
 /.pytest_cache
 /.ruff_cache
 /backend/poetry.lock
