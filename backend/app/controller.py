@@ -28,7 +28,7 @@ app.add_middleware(
 async def root(form: Base = Depends(checker), file: bytes = File(...)) -> dict:
     (instr_len, ret_len, call_len, file_offset,
      file_offset_end, pc_offset, pc_inc, endian,
-     nr_cand, call_range, ret_range, ret_func_dist) = form
+     nr_cand, call_range, ret_range, ret_func_dist) = form.dict().values()
 
     instruction_values = extract_instruction(file[file_offset:file_offset_end], endian, instr_len)
     instructions = [Instruction(e, instr_len, ret_len, call_len) for e in instruction_values]
@@ -39,8 +39,8 @@ async def root(form: Base = Depends(checker), file: bytes = File(...)) -> dict:
     candidates_with_graph = []
     for prob, _, _, call, ret, step in candidates:
         graph = create_graphs(instructions, call, ret, pc_inc, pc_offset, step)
-        candidates_with_graph.append([{"probability": prob, "ret_opcode": ret,
-                                       "call_opcode": call, "graph": graph}])
+        candidates_with_graph.append({"probability": prob, "ret_opcode": ret,
+                                       "call_opcode": call, "graph": graph})
 
     return {"instructions": instruction_values, "cfgs": candidates_with_graph}
 
