@@ -18,11 +18,12 @@ start = "app.controller:start"
 
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 python-multipart = "^0.0.6"
 fastapi = "^0.95.0"
 pydantic = "^1.10.7"
 uvicorn = "^0.20.0"
+pre-commit = "^3.2.2"
 
 [tool.poetry.dev-dependencies]
 ruff = "^0.0.261"
