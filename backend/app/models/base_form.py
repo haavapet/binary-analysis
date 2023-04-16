@@ -7,7 +7,6 @@ from fastapi.exceptions import HTTPException
 from pydantic import BaseModel, ValidationError
 
 
-@dataclass
 class Base(BaseModel):
     instructionLength: int
     retOpcodeLength: int
@@ -21,9 +20,6 @@ class Base(BaseModel):
     callCandidateRange: list
     retCandidateRange: list
     returnToFunctionPrologueDistance: int
-
-    def __iter__(self: "Base") -> Iterator:
-        return iter(astuple(self))
 
 
 def checker(data: str = Form(...)) -> Base:
