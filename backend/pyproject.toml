@@ -1,0 +1,25 @@
+[build-system]
+requires = ["poetry-core>=1.0.8"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "binary-analysis"
+version = "1.0.0"
+readme = "../README.md"
+repository = "https://github.com/haavapet/binary-analysis"
+authors = ["Haavapet <haavapet@stud.ntnu.no>"]
+description = "A binary analysis program to help you reverse engineer binaries of unknown instruction set architectures"
+packages = [
+    { include = "app" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+python-multipart = "^0.0.6"
+fastapi = "^0.95.0"
+pydantic = "^1.10.7"
+uvicorn = "^0.20.0"
+
+[tool.poetry.dev-dependencies]
+ruff = "^0.0.261"
+pytest = "^7.3.1"

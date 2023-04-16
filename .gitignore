@@ -11,3 +11,4 @@ backend/app/test.py
 /backend/tests/__pycache__
 /.pytest_cache
 /.ruff_cache
+/backend/poetry.lock
