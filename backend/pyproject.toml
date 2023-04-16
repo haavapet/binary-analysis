@@ -23,11 +23,11 @@ python-multipart = "^0.0.6"
 fastapi = "^0.95.0"
 pydantic = "^1.10.7"
 uvicorn = "^0.20.0"
-pre-commit = "^3.2.2"
 
 [tool.poetry.dev-dependencies]
 ruff = "^0.0.261"
 pytest = "^7.3.1"
+pre-commit = "^3.2.2"
 
 [tool.ruff]
 select = ["E", "F", "W", "I", "N", "A", "COM", "C4", "PIE", "T20", "PT", "SIM", "ARG", "ANN"]
