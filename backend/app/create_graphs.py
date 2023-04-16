@@ -1,21 +1,12 @@
-class FunctionBlockNode():
-    def __init__(self: "FunctionBlockNode",
-                 instructions: list,
-                 fb_id: int,
-                 start: int,
-                 end: int) -> None:
-        self.instructions = instructions
-        self.id = fb_id
-        self.called_function_blocks = []
-        self.start = start
-        self.end = end
+from .models.function_block_node import FunctionBlockNode
+
 
 def create_graphs(instrs: list,
                   call_candidate: int,
                   ret_candidate: int,
                   pc_inc_per_instr: int,
                   pc_offset: int,
-                  step: int) -> list(dict):
+                  step: int) -> list:
     # Find all function prologues
     function_prologues = []
     for e in instrs:

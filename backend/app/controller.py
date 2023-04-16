@@ -1,15 +1,12 @@
-from dataclasses import astuple, dataclass
-from typing import Iterator
-
-import uvicorn
-from create_graphs import create_graphs
-from fastapi import Depends, FastAPI, File, Form, status
-from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import HTTPException
+from fastapi import Depends, FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
-from find_best_candidates import find_best_candidates
-from instructions import Instruction, extract_instruction
-from pydantic import BaseModel, ValidationError
+from uvicorn import run as run_server
+
+from .create_graphs import create_graphs
+from .find_best_candidates import find_best_candidates
+from .instructions import extract_instruction
+from .models.base_form import Base, checker
+from .models.instruction import Instruction
 
 app = FastAPI()
 
@@ -26,36 +23,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@dataclass
-class Base(BaseModel):
-    instructionLength: int
-    retOpcodeLength: int
-    callOpcodeLength: int
-    fileOffset: int
-    fileOffsetEnd: int
-    pcOffset: int
-    pcIncPerInstr: int
-    endiannes: str
-    nrCandidates: int
-    callCandidateRange: list
-    retCandidateRange: list
-    returnToFunctionPrologueDistance: int
-
-    def __iter__(self: "Base") -> Iterator:
-        return iter(astuple(self))
-
-
-def checker(data: str = Form(...)) -> Base:
-    try:
-        model = Base.parse_raw(data)
-    except ValidationError as e:
-        raise HTTPException(
-            detail=jsonable_encoder(e.errors()),
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        )
-
-    return model
 
 @app.post("/api")
 async def root(form: Base = Depends(checker), file: bytes = File(...)) -> dict:
@@ -79,4 +46,4 @@ async def root(form: Base = Depends(checker), file: bytes = File(...)) -> dict:
 
 def start() -> None:
     """Launched with `poetry run start` at root level"""
-    uvicorn.run("app.controller:app", host="0.0.0.0", port=8000, reload=True)
+    run_server("app.controller:app", host="0.0.0.0", port=8000, reload=True)

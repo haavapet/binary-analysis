@@ -34,4 +34,4 @@ line-length = 100
 
 # TODO location of model to custom file
 [tool.ruff.per-file-ignores]
-"app/controller.py" = ["N815"]
+"app/models/base_form.py" = ["N815"]

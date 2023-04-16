@@ -7,10 +7,10 @@ def find_best_candidates(
         pc_inc: int,
         pc_offset: int,
         nr_candidates: int,
-        call_candidate_range: list(int, int),
-        ret_candidate_range: list(int, int),
+        call_candidate_range: list,
+        ret_candidate_range: list,
         return_to_function_prologue_distance: int,
-    ) -> list(int, int, int, int, int, int):
+    ) -> list:
     valid_call_candidates = (Counter([e.call_opcode for e in instructions])
                              .most_common(call_candidate_range[1])[call_candidate_range[0]:])
     valid_ret_candidates = ([e for e, _ in Counter([e.ret_opcode for e in instructions])
