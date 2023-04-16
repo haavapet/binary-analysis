@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run as run_server
 
 from .create_graphs import create_graphs
+from .extract_instructions import extract_instruction
 from .find_best_candidates import find_best_candidates
-from .instructions import extract_instruction
 from .models.base_form import Base, checker
 from .models.instruction import Instruction
 
