@@ -6,12 +6,16 @@ BYTE_LENGTH = 8
 class Instruction():
     call_instruction = None # TODO rename this
     function_block = None
-    # TODO: opcode may not be first bits, and we are assuming that call instruction only consists of opcode and operand
+    # TODO: opcode may not be first bits, and we are assuming that
+    #  call instruction only consists of opcode and operand
     def __init__(self, instruction, instr_len, ret_len, call_len):
         self.value = instruction
-        self.ret_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - ret_len))
-        self.call_opcode = instruction & ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - call_len))
-        self.call_operand = instruction & (0xFFFFFFFFFFFFFFFF >> (64-instr_len+call_len))
+        self.ret_opcode = (instruction & 
+                           ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - ret_len)))
+        self.call_opcode = (instruction &
+                            ((0xFFFFFFFFFFFFFFFF >> (64-instr_len)) << (instr_len - call_len)))
+        self.call_operand = (instruction & 
+                             (0xFFFFFFFFFFFFFFFF >> (64-instr_len+call_len)))
 
 def extract_instruction(bin, endiannes, instr_length):
     instructions = []
@@ -31,7 +35,9 @@ def extract_instruction(bin, endiannes, instr_length):
         # If overflow (i.e last instruction has fewer than instr_len bits) then pad empty bytes
         if len(instruction_bits) != end - start + 1:
             overflow_bits = j + instr_length - len(bin) * BYTE_LENGTH
-            instruction_bits += [0x0] * ((overflow_bits // BYTE_LENGTH) - (overflow_bits % BYTE_LENGTH == 0) + 1)
+            overflow_bytes = (overflow_bits // BYTE_LENGTH)
+            overflow_aligned_byte = (overflow_bits % BYTE_LENGTH == 0)
+            instruction_bits += [0x0] * (overflow_bytes - overflow_aligned_byte + 1)
 
         # negate the first bits of the first byte if not part of instruction
         instruction_bits[0] &= 0xFF >> start_offset
@@ -46,7 +52,8 @@ def extract_instruction(bin, endiannes, instr_length):
         # if instruction is multiple bytes we also need to set the bytes in the correct place
         instruction_bits = [e << (BYTE_LENGTH * i) for i, e in enumerate(instruction_bits)]
 
-        # align by end, f.ex if byte is 0b00101000 and end offset is 5, then correctly shifted instr is 0b00101
+        # align by end, f.ex if byte is 0b00101000 and end offset is 5, 
+        # then correctly shifted instr is 0b00101
         instruction_bits = [e >> (BYTE_LENGTH - end_offset) for e in instruction_bits]
 
         # bitwise or all bytes of array together into a single instruction value

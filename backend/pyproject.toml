@@ -13,6 +13,10 @@ packages = [
     { include = "app" }
 ]
 
+[tool.poetry.scripts]
+start = "app.controller:start"
+
+
 [tool.poetry.dependencies]
 python = "^3.7"
 python-multipart = "^0.0.6"
@@ -23,3 +27,7 @@ uvicorn = "^0.20.0"
 [tool.poetry.dev-dependencies]
 ruff = "^0.0.261"
 pytest = "^7.3.1"
+
+[tool.ruff]
+select = ["E", "F"] # select = ["E", "F", "ANN"]
+line-length = 100
