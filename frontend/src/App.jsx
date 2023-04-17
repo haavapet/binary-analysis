@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Container, Row, Toast, ToastContainer } from "react-bootstrap";
+import { Container, Row, Toast, ToastContainer, Col, Card } from "react-bootstrap";
 
 import GraphPage from "./pages/graphPage";
 import FormPage from "./pages/formPage";
 import UploadPage from "./pages/uploadPage";
 import IntroPage from "./pages/introPage";
 import ProgressBar from "./components/progressBar";
-import MainCard from "./components/mainCard";
 
 import "./App.css";
+import PageButton from "./components/pageButton";
 
 const App = () => {
   const [graphData, setGraphData] = useState(null);
@@ -36,13 +36,10 @@ const App = () => {
     postFormData.append("data", JSON.stringify(formData));
     postFormData.append("file", file);
 
-    let result = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_URL || "localhost:8000"}/api`,
-      {
-        method: "POST",
-        body: postFormData,
-      }
-    )
+    let result = await fetch(`http://${process.env.REACT_APP_BACKEND_URL || "localhost:8000"}/api`, {
+      method: "POST",
+      body: postFormData,
+    })
       .then((response) => response.json())
       .then((data) => {
         setGraphData(data);
@@ -58,36 +55,28 @@ const App = () => {
 
   return (
     <Container fluid className="vh-100 d-flex flex-column">
+      {/* Progress bar at the top of the page */}
       <Row>
         <ProgressBar page={page} />
       </Row>
+
+      {/* The main card which displays the different pages/steps */}
       <Row className="flex-grow-1">
-        <MainCard page={page} file={file} setPage={setPage}>
-          {page == 0 && <IntroPage />}
-          {page == 1 && (
-            <UploadPage
-              setFile={setFile}
-              file={file}
-              setToastMessage={setToastMessage}
-            />
-          )}
-          {page == 2 && (
-            <FormPage
-              setFormData={setFormData}
-              formData={formData}
-              postForm={postForm}
-            />
-          )}
-          {page == 3 && graphData && <GraphPage graphs={graphData} />}
-        </MainCard>
+        <PageButton left page={page} setPage={setPage} />
+        <Col xs={8} className="d-flex">
+          <Card className="mx-auto">
+            {page == 0 && <IntroPage />}
+            {page == 1 && <UploadPage setFile={setFile} file={file} setToastMessage={setToastMessage} />}
+            {page == 2 && <FormPage setFormData={setFormData} formData={formData} postForm={postForm} />}
+            {page == 3 && graphData && <GraphPage graphs={graphData} />}
+          </Card>
+        </Col>
+        <PageButton right page={page} setPage={setPage} file={file} />
       </Row>
+
+      {/* Below is for error message, and is rarely visible */}
       <ToastContainer className="p-3" position="bottom-center">
-        <Toast
-          onClose={() => setToastMessage("")}
-          show={toastMessage != ""}
-          delay={5000}
-          autohide
-        >
+        <Toast onClose={() => setToastMessage("")} show={toastMessage != ""} delay={5000} autohide>
           <Toast.Body>{toastMessage}</Toast.Body>
         </Toast>
       </ToastContainer>

@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Col,
-  Row,
-  OverlayTrigger,
-  Tooltip,
-  InputGroup,
-} from "react-bootstrap";
+import { Form, Col, Row, OverlayTrigger, Tooltip, InputGroup } from "react-bootstrap";
 
 const FormPage = ({ setFormData, formData, postForm }) => {
   const [validated, setValidated] = useState(false);
@@ -25,21 +18,12 @@ const FormPage = ({ setFormData, formData, postForm }) => {
   }
 
   return (
-    <Form
-      id={"binaryInfoForm"}
-      noValidate
-      validated={validated}
-      onSubmit={handleSubmit}
-      style={{ width: "80%" }}
-    >
+    <Form id={"binaryInfoForm"} noValidate validated={validated} onSubmit={handleSubmit} style={{ width: "80%" }}>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupInstrLength">
             <Form.Label>Instruction Length&nbsp;</Form.Label>
-            <OverlayTrigger
-              placement={"right"}
-              overlay={<Tooltip>Length of instruction in bits</Tooltip>}
-            >
+            <OverlayTrigger placement={"right"} overlay={<Tooltip>Length of instruction in bits</Tooltip>}>
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
             <Form.Control
@@ -63,10 +47,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
         <Col>
           <Form.Group className="mb-3" controlId="formGroupEndiannes">
             <Form.Label>Endiannes&nbsp;</Form.Label>
-            <OverlayTrigger
-              placement={"right"}
-              overlay={<Tooltip>Big vs little endiannes</Tooltip>}
-            >
+            <OverlayTrigger placement={"right"} overlay={<Tooltip>Big vs little endiannes</Tooltip>}>
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
             <Form.Control
@@ -93,11 +74,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
             <Form.Label>Ret opcode Length&nbsp;</Form.Label>
             <OverlayTrigger
               placement={"right"}
-              overlay={
-                <Tooltip>
-                  Length of the opcode of the return instruction in bits
-                </Tooltip>
-              }
+              overlay={<Tooltip>Length of the opcode of the return instruction in bits</Tooltip>}
             >
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
@@ -121,11 +98,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
             <Form.Label>Call opcode Length&nbsp;</Form.Label>
             <OverlayTrigger
               placement={"right"}
-              overlay={
-                <Tooltip>
-                  Length of the opcode of the call instruction in bits
-                </Tooltip>
-              }
+              overlay={<Tooltip>Length of the opcode of the call instruction in bits</Tooltip>}
             >
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
@@ -154,11 +127,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
             <Form.Label>File offset start&nbsp;</Form.Label>
             <OverlayTrigger
               placement={"right"}
-              overlay={
-                <Tooltip>
-                  Byte position of where in the file the code section starts
-                </Tooltip>
-              }
+              overlay={<Tooltip>Byte position of where in the file the code section starts</Tooltip>}
             >
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
@@ -176,10 +145,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 placeholder="Ex. 0"
                 onChange={(e) => {
                   const input = e.currentTarget.value;
-                  if (
-                    /^[0-9A-Fa-f]+$/.test(e.currentTarget.value) ||
-                    input === ""
-                  ) {
+                  if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || input === "") {
                     setFormData((prev) => {
                       return {
                         ...prev,
@@ -197,11 +163,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
             <Form.Label>File offset end&nbsp;</Form.Label>
             <OverlayTrigger
               placement={"right"}
-              overlay={
-                <Tooltip>
-                  Byte position of where in the file the code section ends
-                </Tooltip>
-              }
+              overlay={<Tooltip>Byte position of where in the file the code section ends</Tooltip>}
             >
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
@@ -218,10 +180,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 }
                 placeholder="Ex. 430"
                 onChange={(e) => {
-                  if (
-                    /^[0-9A-Fa-f]+$/.test(e.currentTarget.value) ||
-                    e.currentTarget.value === ""
-                  ) {
+                  if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || e.currentTarget.value === "") {
                     setFormData((prev) => {
                       return {
                         ...prev,
@@ -241,12 +200,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
             <Form.Label>PC offset&nbsp;</Form.Label>
             <OverlayTrigger
               placement={"right"}
-              overlay={
-                <Tooltip>
-                  The byte position in hexadecimal of the first instruction in
-                  virtual memory
-                </Tooltip>
-              }
+              overlay={<Tooltip>The byte position in hexadecimal of the first instruction in virtual memory</Tooltip>}
             >
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
@@ -255,19 +209,12 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               <Form.Control
                 required
                 value={
-                  formData.pcOffset
-                    ? formData.pcOffset.toString(16).toUpperCase()
-                    : formData.pcOffset === 0
-                    ? 0
-                    : ""
+                  formData.pcOffset ? formData.pcOffset.toString(16).toUpperCase() : formData.pcOffset === 0 ? 0 : ""
                 }
                 placeholder="Ex. 200"
                 onChange={(e) => {
                   const input = e.currentTarget.value;
-                  if (
-                    /^[0-9A-Fa-f]+$/.test(e.currentTarget.value) ||
-                    input === ""
-                  ) {
+                  if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || input === "") {
                     setFormData((prev) => {
                       return {
                         ...prev,
@@ -281,18 +228,14 @@ const FormPage = ({ setFormData, formData, postForm }) => {
           </Form.Group>
         </Col>
         <Col>
-          <Form.Group
-            className="mb-3"
-            controlId="formGroupPcIncerPerInstruction"
-          >
+          <Form.Group className="mb-3" controlId="formGroupPcIncerPerInstruction">
             <Form.Label>PC increments&nbsp;</Form.Label>
             <OverlayTrigger
               placement={"right"}
               overlay={
                 <Tooltip>
-                  How many bits the instruction pointer increase between each
-                  instruction (usually same as instruction length in bytes, i.e
-                  16 bit instruction then increment pc by 2 )
+                  How many bits the instruction pointer increase between each instruction (usually same as instruction
+                  length in bytes, i.e 16 bit instruction then increment pc by 2 )
                 </Tooltip>
               }
             >
@@ -325,11 +268,9 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               placement={"right"}
               overlay={
                 <Tooltip>
-                  When searching for call candidates, we do a frequency
-                  analysis. If you choose for example 0 and 5 for this range,
-                  only the 5 most frequent instructions will be evaluated as a
-                  possible call candidate, this lets you reduce the search space
-                  and improve accuracy
+                  When searching for call candidates, we do a frequency analysis. If you choose for example 0 and 5 for
+                  this range, only the 5 most frequent instructions will be evaluated as a possible call candidate, this
+                  lets you reduce the search space and improve accuracy
                 </Tooltip>
               }
             >
@@ -347,10 +288,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      callCandidateRange: [
-                        parseInt(e.target.value),
-                        formData.callCandidateRange[1],
-                      ],
+                      callCandidateRange: [parseInt(e.target.value), formData.callCandidateRange[1]],
                     };
                   })
                 }
@@ -366,10 +304,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      callCandidateRange: [
-                        formData.callCandidateRange[0],
-                        parseInt(e.target.value),
-                      ],
+                      callCandidateRange: [formData.callCandidateRange[0], parseInt(e.target.value)],
                     };
                   })
                 }
@@ -384,11 +319,9 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               placement={"right"}
               overlay={
                 <Tooltip>
-                  When searching for return candidates, we do a frequency
-                  analysis. If you choose for example 0 and 5 for this range,
-                  only the 5 most frequent instructions will be evaluated as a
-                  possible return candidate, this lets you reduce the search
-                  space and improve accuracy
+                  When searching for return candidates, we do a frequency analysis. If you choose for example 0 and 5
+                  for this range, only the 5 most frequent instructions will be evaluated as a possible return
+                  candidate, this lets you reduce the search space and improve accuracy
                 </Tooltip>
               }
             >
@@ -406,10 +339,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      retCandidateRange: [
-                        parseInt(e.target.value),
-                        formData.retCandidateRange[1],
-                      ],
+                      retCandidateRange: [parseInt(e.target.value), formData.retCandidateRange[1]],
                     };
                   })
                 }
@@ -425,10 +355,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      retCandidateRange: [
-                        formData.retCandidateRange[0],
-                        parseInt(e.target.value),
-                      ],
+                      retCandidateRange: [formData.retCandidateRange[0], parseInt(e.target.value)],
                     };
                   })
                 }
@@ -439,18 +366,14 @@ const FormPage = ({ setFormData, formData, postForm }) => {
       </Row>
       <Row>
         <Col>
-          <Form.Group
-            className="mb-3"
-            controlId="formGroupReturnToFunctionPrologueDistance"
-          >
+          <Form.Group className="mb-3" controlId="formGroupReturnToFunctionPrologueDistance">
             <Form.Label>Ret and prologue distance&nbsp;</Form.Label>
             <OverlayTrigger
               placement={"right"}
               overlay={
                 <Tooltip>
-                  The amount of instruction between a return instruction, and
-                  the prologue of the following function, we search the whole
-                  space up to and including this value.
+                  The amount of instruction between a return instruction, and the prologue of the following function, we
+                  search the whole space up to and including this value.
                 </Tooltip>
               }
             >
@@ -481,8 +404,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               placement={"right"}
               overlay={
                 <Tooltip>
-                  This option lets you choose the amount of candidate graphs to
-                  display on the next page
+                  This option lets you choose the amount of candidate graphs to display on the next page
                 </Tooltip>
               }
             >

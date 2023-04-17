@@ -2,10 +2,7 @@ import { Col } from "react-bootstrap";
 
 const ProgressBar = ({ page }) => {
   return (
-    <Col
-      className="d-flex justify-content-center align-items-center"
-      style={{ paddingTop: "40px" }}
-    >
+    <Col className="d-flex justify-content-center align-items-center" style={{ paddingTop: "40px" }}>
       <div className={page == 0 ? "steps steps-active" : "steps"}>
         <img alt="" src={`${process.env.PUBLIC_URL}/img/info.jpeg`} />
       </div>

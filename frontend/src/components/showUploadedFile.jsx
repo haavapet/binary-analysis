@@ -12,10 +12,7 @@ const ShowUploadedFile = ({ setFile, file }) => {
         X
       </span>
       <center style={{ paddingTop: "20%" }}>
-        <i
-          className="fas fa-cloud-upload-alt"
-          style={{ fontSize: "60px", padding: "50px" }}
-        ></i>
+        <i className="fas fa-cloud-upload-alt" style={{ fontSize: "60px", padding: "50px" }}></i>
         <div>Selected file is {file.name}</div>
       </center>
     </div>

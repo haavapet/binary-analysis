@@ -1,11 +1,6 @@
 import { Modal, Table } from "react-bootstrap";
 
-const ModalInfo = ({
-  modalIsOpen,
-  closeModal,
-  activeModalNode,
-  instructions,
-}) => {
+const ModalInfo = ({ modalIsOpen, closeModal, activeModalNode, instructions }) => {
   if (activeModalNode != null)
     return (
       <Modal show={modalIsOpen} onHide={closeModal} centered size="lg">
@@ -23,18 +18,14 @@ const ModalInfo = ({
               </tr>
             </thead>
             <tbody>
-              {instructions
-                .slice(activeModalNode.start, activeModalNode.end)
-                .map((e, i) => (
-                  <tr key={i}>
-                    <td>{i + activeModalNode.start}</td>
-                    <td>
-                      0x{("0000" + e.toString(16).toUpperCase()).slice(-4)}
-                    </td>
-                    <td>...</td>
-                    <td>...</td>
-                  </tr>
-                ))}
+              {instructions.slice(activeModalNode.start, activeModalNode.end).map((e, i) => (
+                <tr key={i}>
+                  <td>{i + activeModalNode.start}</td>
+                  <td>0x{("0000" + e.toString(16).toUpperCase()).slice(-4)}</td>
+                  <td>...</td>
+                  <td>...</td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Modal.Body>

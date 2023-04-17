@@ -9,6 +9,7 @@ const Graph = ({ graph, openModal }) => {
   useEffect(() => {
     let g = createGraph();
     drawChart(g);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graph]);
 
   const createGraph = () => {
@@ -31,9 +32,7 @@ const Graph = ({ graph, openModal }) => {
     let inner = d3.select("svg g");
 
     // zoom
-    let zoom = d3
-      .zoom()
-      .on("zoom", (e) => inner.attr("transform", e.transform));
+    let zoom = d3.zoom().on("zoom", (e) => inner.attr("transform", e.transform));
     svg.call(zoom);
 
     // animate
@@ -49,24 +48,17 @@ const Graph = ({ graph, openModal }) => {
     const fullWidth = parent.clientWidth || parent.parentNode.clientWidth;
     const fullHeight = parent.clientHeight || parent.parentNode.clientHeight;
 
-    var scale =
-      0.9 / Math.max(bounds.width / fullWidth, bounds.height / fullHeight);
+    var scale = 0.9 / Math.max(bounds.width / fullWidth, bounds.height / fullHeight);
     var translate = [
       fullWidth / 2 - scale * (bounds.x + bounds.width / 2),
       fullHeight / 2 - scale * (bounds.y + bounds.height / 2),
     ];
-    var transform = d3.zoomIdentity
-      .translate(translate[0], translate[1])
-      .scale(scale);
+    var transform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale);
 
     svg.transition().duration(1000).call(zoom.transform, transform);
 
     // add on node click to return original node
-    svg
-      .selectAll("g.node")
-      .on("click", (e) =>
-        openModal(graph.find((node) => node.f_id == e.target.__data__))
-      );
+    svg.selectAll("g.node").on("click", (e) => openModal(graph.find((node) => node.f_id == e.target.__data__)));
   };
 
   return (

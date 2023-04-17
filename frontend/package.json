@@ -27,8 +27,18 @@
       "react-app/jest"
     ],
     "rules": {
-      "eqeqeq": "off"
+      "eqeqeq": "off",
+      "max-len": [
+        "error",
+        {
+          "code": 120,
+          "tabWidth": 2
+        }
+      ]
     }
+  },
+  "prettier": {
+    "printWidth": 120
   },
   "browserslist": {
     "production": [
