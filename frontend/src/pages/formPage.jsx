@@ -59,9 +59,6 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 })
               }
             >
-              <option value="" hidden>
-                Choose endiannes
-              </option>
               <option value="big">Big</option>
               <option value="little">Little</option>
             </Form.Control>
@@ -288,7 +285,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      callCandidateRange: [parseInt(e.target.value), formData.callCandidateRange[1]],
+                      callCandidateRange: [e.target.value, formData.callCandidateRange[1]],
                     };
                   })
                 }
@@ -304,7 +301,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      callCandidateRange: [formData.callCandidateRange[0], parseInt(e.target.value)],
+                      callCandidateRange: [formData.callCandidateRange[0], e.target.value],
                     };
                   })
                 }
@@ -339,7 +336,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      retCandidateRange: [parseInt(e.target.value), formData.retCandidateRange[1]],
+                      retCandidateRange: [e.target.value, formData.retCandidateRange[1]],
                     };
                   })
                 }
@@ -355,7 +352,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                   setFormData((prev) => {
                     return {
                       ...prev,
-                      retCandidateRange: [formData.retCandidateRange[0], parseInt(e.target.value)],
+                      retCandidateRange: [formData.retCandidateRange[0], e.target.value],
                     };
                   })
                 }

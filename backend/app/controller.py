@@ -1,3 +1,5 @@
+from dataclasses import asdict
+
 from fastapi import Depends, FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run as run_server
@@ -5,7 +7,7 @@ from uvicorn import run as run_server
 from .create_graphs import create_graphs
 from .extract_instructions import extract_instruction
 from .find_best_candidates import find_best_candidates
-from .models.base_form import Base, checker
+from .models.base_form import Base
 from .models.instruction import Instruction
 
 app = FastAPI()
@@ -24,14 +26,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.post("/api")
-async def root(form: Base = Depends(checker), file: bytes = File(...)) -> dict:
+async def root(form: Base = Depends(), file: bytes = File(...)) -> dict:
     (instr_len, ret_len, call_len, file_offset,
      file_offset_end, pc_offset, pc_inc, endian,
-     nr_cand, call_range, ret_range, ret_func_dist) = form.dict().values()
-
+     nr_cand, call_range, ret_range, ret_func_dist) = asdict(form).values()
     instruction_values = extract_instruction(file[file_offset:file_offset_end], endian, instr_len)
     instructions = [Instruction(e, instr_len, ret_len, call_len) for e in instruction_values]
+
 
     candidates = find_best_candidates(instructions, pc_inc, pc_offset, nr_cand,
                                       call_range, ret_range, ret_func_dist)

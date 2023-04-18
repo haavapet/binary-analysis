@@ -21,13 +21,13 @@ start = "app.controller:start"
 python = "^3.8"
 python-multipart = "^0.0.6"
 fastapi = "^0.95.0"
-pydantic = "^1.10.7"
 uvicorn = "^0.20.0"
 
 [tool.poetry.dev-dependencies]
 ruff = "^0.0.261"
 pytest = "^7.3.1"
 pre-commit = "^3.2.2"
+httpx = "^0.24.0"
 
 [tool.ruff]
 select = ["E", "F", "W", "I", "N", "A", "COM", "C4", "PIE", "T20", "PT", "SIM", "ARG", "ANN"]
@@ -36,3 +36,4 @@ line-length = 100
 # TODO location of model to custom file
 [tool.ruff.per-file-ignores]
 "app/models/base_form.py" = ["N815"]
+"tests/test_integration.py" = ["N815"]

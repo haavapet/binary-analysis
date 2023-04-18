@@ -1,32 +1,20 @@
 
-from fastapi import Form, status
-from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import HTTPException
-from pydantic import BaseModel, ValidationError
+from dataclasses import dataclass
+
+from fastapi import Form
 
 
-class Base(BaseModel):
-    instructionLength: int
-    retOpcodeLength: int
-    callOpcodeLength: int
-    fileOffset: int
-    fileOffsetEnd: int
-    pcOffset: int
-    pcIncPerInstr: int
-    endiannes: str
-    nrCandidates: int
-    callCandidateRange: list
-    retCandidateRange: list
-    returnToFunctionPrologueDistance: int
-
-
-def checker(data: str = Form(...)) -> Base:
-    try:
-        model = Base.parse_raw(data)
-    except ValidationError as e:
-        raise HTTPException(
-            detail=jsonable_encoder(e.errors()),
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        )
-
-    return model
+@dataclass
+class Base:
+    instructionLength: int = Form(...)
+    retOpcodeLength: int = Form(...)
+    callOpcodeLength: int = Form(...)
+    fileOffset: int = Form(...)
+    fileOffsetEnd: int = Form(...)
+    pcOffset: int = Form(...)
+    pcIncPerInstr: int = Form(...)
+    endiannes: str = Form(...)
+    nrCandidates: int = Form(...)
+    callCandidateRange: list[int] = Form(...)
+    retCandidateRange: list[int] = Form(...)
+    returnToFunctionPrologueDistance: int = Form(...)

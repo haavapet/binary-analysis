@@ -14,7 +14,7 @@ const App = () => {
   const [graphData, setGraphData] = useState(null);
   const [formData, setFormData] = useState({
     instructionLength: null,
-    endiannes: "little",
+    endiannes: "big",
     retOpcodeLength: null,
     callOpcodeLength: null,
     fileOffset: null,
@@ -33,8 +33,16 @@ const App = () => {
   const postForm = async () => {
     var postFormData = new FormData();
 
-    postFormData.append("data", JSON.stringify(formData));
     postFormData.append("file", file);
+    for (const name in formData) {
+      // Arrays/lists needs to be encoded with key,value for each item in the array
+      if (formData[name] instanceof Array) {
+        postFormData.append(name, formData[name][0]);
+        postFormData.append(name, formData[name][1]);
+      } else {
+        postFormData.append(name, formData[name]);
+      }
+    }
 
     let result = await fetch(`http://${process.env.REACT_APP_BACKEND_URL || "localhost:8000"}/api`, {
       method: "POST",
