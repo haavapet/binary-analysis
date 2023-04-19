@@ -3,11 +3,12 @@
 /tekst
 backend/app/test.py
 
-# frontend node modules
+# frontend
 /frontend/node_modules
+**/.yarn
 
-# backend caches
-backend/**/__pycache__/
-/.pytest_cache
-/.ruff_cache
+# backend
+**/__pycache__/
+**/.pytest_cache
+**/.ruff_cache
 /backend/poetry.lock
