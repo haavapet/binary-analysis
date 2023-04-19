@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Dependencies
-        run: yarn install eslint
+        run: yarn add eslint
 
       - name: Code Linting
         run: yarn lint
