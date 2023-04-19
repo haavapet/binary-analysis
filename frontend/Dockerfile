@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN yarn install
 
 COPY ./ .
 
@@ -14,4 +14,4 @@ EXPOSE 3000
 ARG BACKEND_URL
 ENV REACT_APP_BACKEND_URL=$BACKEND_URL
 
-CMD [ "npm", "run", "start" ]
+CMD [ "yarn", "start" ]
