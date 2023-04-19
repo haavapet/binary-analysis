@@ -28,12 +28,12 @@ The backend will now be running on port 3000 by default
 
 ## Frontend
 
-Prerequisites: npm, node.js
+Prerequisites: yarn, node.js
 
 ```
 // navigate to frontend folder
-$  npm install
-$  npm start
+$  yarn install
+$  yarn start
 ```
 
 The frontend will be running on port 8000 by default
