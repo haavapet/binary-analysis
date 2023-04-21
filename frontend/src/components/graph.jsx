@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import dagreD3 from "dagre-d3";
 import * as d3 from "d3";
 
+// TODO update this file, move logic to hooks
 const Graph = ({ graph, openModal }) => {
   useEffect(() => {
     let g = createGraph();

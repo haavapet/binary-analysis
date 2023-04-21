@@ -1,7 +1,13 @@
 import React from "react";
 import { Button, Col } from "react-bootstrap";
 
-const PageButton = ({ left, right, page, setPage, file }) => {
+import usePage from "../hooks/usePage";
+import useForm from "../hooks/useForm";
+
+const PageButton = ({ left, right }) => {
+  const { page, incrementPage, decrementPage } = usePage();
+  const { file } = useForm();
+
   if (page == 2 && right)
     return (
       <Col className="d-flex justify-content-center align-items-center">
@@ -11,7 +17,7 @@ const PageButton = ({ left, right, page, setPage, file }) => {
   if (left)
     return (
       <Col className="d-flex justify-content-center align-items-center">
-        <Button className="btn-secondary" onClick={() => setPage(page - 1)} hidden={page == 0}>
+        <Button className="btn-secondary" onClick={decrementPage} hidden={page == 0}>
           {String.fromCharCode(8592)}
         </Button>
       </Col>
@@ -21,7 +27,7 @@ const PageButton = ({ left, right, page, setPage, file }) => {
       <Col className="d-flex justify-content-center align-items-center">
         <Button
           className="btn-secondary"
-          onClick={() => setPage(page + 1)}
+          onClick={incrementPage}
           disabled={page == 1 && file == null}
           hidden={page == 3}
         >

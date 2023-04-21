@@ -1,8 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const UploadFile = ({ setFile, setToastMessage }) => {
+import useToast from "../hooks/useToast";
+import useForm from "../hooks/useForm";
+
+const UploadFile = () => {
   const [dragOver, setDragOver] = useState(false);
+  const { setToastMessage } = useToast();
+  const { setFormElement } = useForm();
 
   const onDrop = useCallback(
     (acceptedFile) => {
@@ -13,7 +18,7 @@ const UploadFile = ({ setFile, setToastMessage }) => {
           reader.onabort = () => setToastMessage("File reading was aborted");
           reader.onerror = () => setToastMessage("File reading has failed");
           reader.onload = () => {
-            setFile(file);
+            setFormElement("file", file);
           };
 
           reader.readAsDataURL(file);
@@ -22,7 +27,7 @@ const UploadFile = ({ setFile, setToastMessage }) => {
         setToastMessage("Please only select 1 file for analysis");
       }
     },
-    [setFile, setToastMessage]
+    [setFormElement, setToastMessage]
   );
 
   const { getRootProps, getInputProps } = useDropzone({

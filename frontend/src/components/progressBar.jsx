@@ -1,6 +1,10 @@
 import { Col } from "react-bootstrap";
 
-const ProgressBar = ({ page }) => {
+import usePage from "../hooks/usePage";
+
+const ProgressBar = () => {
+  const { page } = usePage();
+
   return (
     <Col className="d-flex justify-content-center align-items-center" style={{ paddingTop: "40px" }}>
       <div className={page == 0 ? "steps steps-active" : "steps"}>

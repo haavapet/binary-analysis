@@ -1,24 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Col, Row, OverlayTrigger, Tooltip, InputGroup } from "react-bootstrap";
 
-const FormPage = ({ setFormData, formData, postForm }) => {
-  const [validated, setValidated] = useState(false);
+import useForm from "../hooks/useForm";
 
-  async function handleSubmit(event) {
-    const form = event.currentTarget;
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (form.checkValidity()) {
-      await postForm();
-    }
-
-    setValidated(true);
-  }
+const FormPage = ({ handleSubmit }) => {
+  const { formData, setFormElement, formValidated } = useForm();
 
   return (
-    <Form id={"binaryInfoForm"} noValidate validated={validated} onSubmit={handleSubmit} style={{ width: "80%" }}>
+    <Form id={"binaryInfoForm"} noValidate validated={formValidated} onSubmit={handleSubmit} style={{ width: "80%" }}>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupInstrLength">
@@ -33,14 +22,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               required
               placeholder="Ex. 16"
               value={formData.instructionLength ?? ""}
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return {
-                    ...prev,
-                    instructionLength: e.target.value,
-                  };
-                })
-              }
+              onChange={(e) => setFormElement("instructionLength", e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -50,15 +32,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
             <OverlayTrigger placement={"right"} overlay={<Tooltip>Big vs little endiannes</Tooltip>}>
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
-            <Form.Control
-              as="select"
-              required
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return { ...prev, endiannes: e.target.value };
-                })
-              }
-            >
+            <Form.Control as="select" required onChange={(e) => setFormElement("endiannes", e.target.value)}>
               <option value="big">Big</option>
               <option value="little">Little</option>
             </Form.Control>
@@ -82,11 +56,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               required
               value={formData.retOpcodeLength ?? ""}
               placeholder="Ex. 16"
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return { ...prev, retOpcodeLength: e.target.value };
-                })
-              }
+              onChange={(e) => setFormElement("retOpcodeLength", e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -106,14 +76,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               required
               value={formData.callOpcodeLength ?? ""}
               placeholder="Ex. 4"
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return {
-                    ...prev,
-                    callOpcodeLength: e.target.value,
-                  };
-                })
-              }
+              onChange={(e) => setFormElement("callOpcodeLength", e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -143,12 +106,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 onChange={(e) => {
                   const input = e.currentTarget.value;
                   if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || input === "") {
-                    setFormData((prev) => {
-                      return {
-                        ...prev,
-                        fileOffset: parseInt(e.target.value, 16),
-                      };
-                    });
+                    setFormElement("fileOffset", parseInt(e.target.value, 16));
                   }
                 }}
               />
@@ -178,12 +136,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 placeholder="Ex. 430"
                 onChange={(e) => {
                   if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || e.currentTarget.value === "") {
-                    setFormData((prev) => {
-                      return {
-                        ...prev,
-                        fileOffsetEnd: parseInt(e.target.value, 16),
-                      };
-                    });
+                    setFormElement("fileOffsetEnd", parseInt(e.target.value, 16));
                   }
                 }}
               />
@@ -212,12 +165,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 onChange={(e) => {
                   const input = e.currentTarget.value;
                   if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || input === "") {
-                    setFormData((prev) => {
-                      return {
-                        ...prev,
-                        pcOffset: parseInt(e.target.value, 16),
-                      };
-                    });
+                    setFormElement("pcOffset", parseInt(e.target.value, 16));
                   }
                 }}
               />
@@ -245,14 +193,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               required
               value={formData.pcIncPerInstr ?? ""}
               placeholder="Ex. 2"
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return {
-                    ...prev,
-                    pcIncPerInstr: e.target.value,
-                  };
-                })
-              }
+              onChange={(e) => setFormElement("pcIncPerInstr", e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -281,14 +222,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 required
                 value={formData.callCandidateRange[0] ?? ""}
                 placeholder="Ex. 3"
-                onChange={(e) =>
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      callCandidateRange: [e.target.value, formData.callCandidateRange[1]],
-                    };
-                  })
-                }
+                onChange={(e) => setFormElement("callCandidateRange", [e.target.value, formData.callCandidateRange[1]])}
               />
               <Form.Control
                 type="number"
@@ -297,14 +231,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 required
                 value={formData.callCandidateRange[1] ?? ""}
                 placeholder="Ex. 7"
-                onChange={(e) =>
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      callCandidateRange: [formData.callCandidateRange[0], e.target.value],
-                    };
-                  })
-                }
+                onChange={(e) => setFormElement("callCandidateRange", [formData.callCandidateRange[0], e.target.value])}
               />
             </InputGroup>
           </Form.Group>
@@ -332,14 +259,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 required
                 value={formData.retCandidateRange[0] ?? ""}
                 placeholder="Ex. 0"
-                onChange={(e) =>
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      retCandidateRange: [e.target.value, formData.retCandidateRange[1]],
-                    };
-                  })
-                }
+                onChange={(e) => setFormElement("retCandidateRange", [e.target.value, formData.retCandidateRange[1]])}
               />
               <Form.Control
                 type="number"
@@ -348,14 +268,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
                 required
                 value={formData.retCandidateRange[1] ?? ""}
                 placeholder="Ex. 10"
-                onChange={(e) =>
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      retCandidateRange: [formData.retCandidateRange[0], e.target.value],
-                    };
-                  })
-                }
+                onChange={(e) => setFormElement("retCandidateRange", [formData.retCandidateRange[0], e.target.value])}
               />
             </InputGroup>
           </Form.Group>
@@ -383,14 +296,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               required
               value={formData.returnToFunctionPrologueDistance ?? ""}
               placeholder="Ex. 4"
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return {
-                    ...prev,
-                    returnToFunctionPrologueDistance: e.target.value,
-                  };
-                })
-              }
+              onChange={(e) => setFormElement("returnToFunctionPrologueDistance", e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -414,11 +320,7 @@ const FormPage = ({ setFormData, formData, postForm }) => {
               required
               value={formData.nrCandidates ?? ""}
               placeholder="Ex. 4"
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return { ...prev, nrCandidates: e.target.value };
-                })
-              }
+              onChange={(e) => setFormElement("nrCandidates", e.target.value)}
             />
           </Form.Group>
         </Col>

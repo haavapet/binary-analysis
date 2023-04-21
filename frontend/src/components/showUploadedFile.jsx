@@ -1,12 +1,16 @@
 import React from "react";
 
-const ShowUploadedFile = ({ setFile, file }) => {
+import useForm from "../hooks/useForm";
+
+const ShowUploadedFile = () => {
+  const { file, setFormElement } = useForm();
+
   return (
     <div className="show-file">
       <span
         className="close"
         onClick={() => {
-          setFile(null);
+          setFormElement("file", null);
         }}
       >
         X

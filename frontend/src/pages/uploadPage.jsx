@@ -1,13 +1,16 @@
 import React from "react";
 
+import useForm from "../hooks/useForm";
 import UploadFile from "../components/uploadFile";
 import ShowUploadedFile from "../components/showUploadedFile";
 
-import "./uploadPage.css";
+import "../styles/uploadPage.css";
 
-const UploadPage = ({ setFile, file, setToastMessage }) => {
-  if (file === null) return <UploadFile setFile={setFile} setToastMessage={setToastMessage} />;
-  else return <ShowUploadedFile setFile={setFile} file={file} />;
+const UploadPage = () => {
+  const { file } = useForm();
+
+  if (file === null) return <UploadFile />;
+  else return <ShowUploadedFile />;
 };
 
 export default UploadPage;
