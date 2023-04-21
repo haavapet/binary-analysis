@@ -8,12 +8,8 @@ const useForm = () => {
     setState((prev) => ({ ...prev, formData: { ...prev.formData, [name]: value } }));
   };
 
-  const validateForm = (event) => {
-    const form = event.currentTarget;
-
-    event.preventDefault();
-    event.stopPropagation();
-
+  const validateForm = () => {
+    const form = document.getElementById("binaryInfoForm");
     setState({ ...state, formValidated: true });
     return form.checkValidity();
   };

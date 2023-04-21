@@ -5,7 +5,7 @@ const useToast = () => {
   const [state, setState] = useContext(Context);
 
   const setToastMessage = (message) => {
-    setState(() => ({ ...state, toastMessage: message }));
+    setState((prev) => ({ ...prev, toastMessage: message }));
   };
 
   let toastMessage = state.toastMessage;
