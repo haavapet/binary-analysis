@@ -5,7 +5,7 @@ const initialState = {
   toastMessage: "",
   graphData: null,
   formValidated: false,
-  /*formData: { TODO CHANGE TO THIS
+  formData: {
     file: null,
     instructionLength: null,
     endiannes: "big",
@@ -19,21 +19,6 @@ const initialState = {
     retCandidateRange: [null, null],
     returnToFunctionPrologueDistance: null,
     nrCandidates: null,
-  },*/
-  formData: {
-    file: null,
-    instructionLength: 16,
-    endiannes: "big",
-    retOpcodeLength: 16,
-    callOpcodeLength: 4,
-    fileOffset: 0,
-    fileOffsetEnd: 0x430,
-    pcOffset: 0x200,
-    pcIncPerInstr: 2,
-    callCandidateRange: [3, 7],
-    retCandidateRange: [0, 10],
-    returnToFunctionPrologueDistance: 4,
-    nrCandidates: 4,
   },
 };
 
