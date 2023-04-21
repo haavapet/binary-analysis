@@ -5,7 +5,7 @@ const initialState = {
   toastMessage: "",
   graphData: null,
   formValidated: false,
-  /*formData: {
+  /*formData: { TODO CHANGE TO THIS
     file: null,
     instructionLength: null,
     endiannes: "big",

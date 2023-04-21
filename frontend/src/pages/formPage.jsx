@@ -3,11 +3,11 @@ import { Form, Col, Row, OverlayTrigger, Tooltip, InputGroup } from "react-boots
 
 import useForm from "../hooks/useForm";
 
-const FormPage = ({ handleSubmit }) => {
+const FormPage = () => {
   const { formData, setFormElement, formValidated } = useForm();
 
   return (
-    <Form id={"binaryInfoForm"} noValidate validated={formValidated} onSubmit={handleSubmit} style={{ width: "80%" }}>
+    <Form id={"binaryInfoForm"} noValidate validated={formValidated} style={{ width: "80%" }}>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupInstrLength">

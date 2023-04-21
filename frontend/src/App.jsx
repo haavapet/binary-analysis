@@ -18,20 +18,23 @@ import PageButton from "./components/pageButton";
 import "./styles/App.css";
 
 const App = () => {
-  const { page, incrementPage } = usePage();
+  const { page, incrementPage, decrementPage } = usePage();
   const { toastMessage, setToastMessage } = useToast();
-  const { formData, validateForm } = useForm();
+  const { formData, file, validateForm } = useForm();
   const { callApi } = useApi();
   const { setGraphData } = useGraph();
 
   const handleSubmit = async (event) => {
     if (validateForm(event)) {
-      await callApi(formData)
+      return await callApi(formData)
         .then((data) => setGraphData(data))
-        // note that for this button click (form page) we incrementPage here rather than in the pagebutton component
-        .then(() => incrementPage())
+        .then(() => true)
         .catch((error) => setToastMessage("Network error: " + error));
     }
+  };
+
+  let onClickRight = async () => {
+    if (page != 2 || (await handleSubmit())) incrementPage();
   };
 
   return (
@@ -43,7 +46,7 @@ const App = () => {
 
       {/* The main card which displays the different pages/steps */}
       <Row className="flex-grow-1">
-        <PageButton left />
+        <PageButton left onClick={decrementPage} hidden={page == 0} />
         <Col xs={8} className="d-flex">
           <Card className="mx-auto">
             {page == 0 && <IntroPage />}
@@ -52,11 +55,11 @@ const App = () => {
             {page == 3 && <GraphPage />}
           </Card>
         </Col>
-        <PageButton right />
+        <PageButton right onClick={onClickRight} hidden={page == 3} disabled={page == 1 && file == null} />
       </Row>
 
       {/* Below is for error message, and is rarely visible */}
-      <ToastContainer className="p-3" position="bottom-center">
+      <ToastContainer className="p-3 position-fixed" position="bottom-center">
         <Toast onClose={() => setToastMessage("")} show={toastMessage != ""} delay={5000} autohide>
           <Toast.Body>{toastMessage}</Toast.Body>
         </Toast>
