@@ -32,7 +32,12 @@ const FormPage = () => {
             <OverlayTrigger placement={"right"} overlay={<Tooltip>Big vs little endiannes</Tooltip>}>
               <i className="fa fa-question-circle" />
             </OverlayTrigger>
-            <Form.Control as="select" required onChange={(e) => setFormElement("endiannes", e.target.value)}>
+            <Form.Control
+              as="select"
+              className="form-select"
+              required
+              onChange={(e) => setFormElement("endiannes", e.target.value)}
+            >
               <option value="big">Big</option>
               <option value="little">Little</option>
             </Form.Control>
