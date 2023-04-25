@@ -24,6 +24,7 @@ fastapi = "^0.95.0"
 uvicorn = "^0.20.0"
 
 [tool.poetry.dev-dependencies]
+mypy = "^1.2.0"
 ruff = "^0.0.261"
 pytest = "^7.3.1"
 pre-commit = "^3.2.2"

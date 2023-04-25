@@ -44,6 +44,10 @@ jobs:
           # default set of ruff rules with GitHub Annotations
           poetry run ruff --format=github --target-version=py37 .
 
+      - name: Static type check with MyPy
+        run: |
+          poetry run mypy app/*.py app/models/*.py
+
       - name: Test with pytest
         run: |
           poetry run pytest -x
