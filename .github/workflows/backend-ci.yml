@@ -13,41 +13,42 @@ jobs:
         working-directory: "./backend"
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v3
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
+        id: setup-python
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install poetry
-        run: |
-          python -m pip install poetry:
-
-      - name: Configure poetry
-        run: |
-          python -m poetry config virtualenvs.in-project true
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
 
       - name: Cache the virtualenv
+        id: cached-poetry-dependencies
         uses: actions/cache@v2
         with:
           path: ./.venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: |
-          python -m poetry install
+          poetry install --no-interaction --no-root
 
       - name: Lint with ruff
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          python -m poetry run ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
-          # default set of ruff rules with GitHub Annotations
           python -m poetry run ruff --format=github --target-version=py37 .
 
       - name: Static type check with MyPy
         run: |
-          python -m poetry run mypy app/*.py app/models/*.py
+          poetry run mypy app/*.py app/models/*.py
 
       - name: Test with pytest
         run: |
-          python -m poetry run pytest -x
+          poetry run pytest -x
