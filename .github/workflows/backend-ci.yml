@@ -21,11 +21,11 @@ jobs:
 
       - name: Install poetry
         run: |
-          pip install poetry
+          python -m pip install poetry:
 
       - name: Configure poetry
         run: |
-          poetry config virtualenvs.in-project true
+          python -m poetry config virtualenvs.in-project true
 
       - name: Cache the virtualenv
         uses: actions/cache@v2
@@ -40,14 +40,14 @@ jobs:
       - name: Lint with ruff
         run: |
           # stop the build if there are Python syntax errors or undefined names
-          poetry run ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
+          python -m poetry run ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
           # default set of ruff rules with GitHub Annotations
-          poetry run ruff --format=github --target-version=py37 .
+          python -m poetry run ruff --format=github --target-version=py37 .
 
       - name: Static type check with MyPy
         run: |
-          poetry run mypy app/*.py app/models/*.py
+          python -m poetry run mypy app/*.py app/models/*.py
 
       - name: Test with pytest
         run: |
-          poetry run pytest -x
+          python -m poetry run pytest -x
