@@ -3,8 +3,8 @@ from operator import ior
 
 BYTE_LENGTH = 8
 
-def extract_instruction(binary: bytes, endiannes: str, instr_length: int) -> list:
-    instructions = []
+def extract_instruction(binary: bytes, endiannes: str, instr_length: int) -> list[int]:
+    instructions: list[int] = []
 
     # iterate through instructions
     for j in range(0, len(binary) * BYTE_LENGTH, instr_length):
@@ -16,7 +16,7 @@ def extract_instruction(binary: bytes, endiannes: str, instr_length: int) -> lis
             end -= 1
             end_offset = 8
 
-        instruction_bits = list(binary[start:end + 1])
+        instruction_bits: list[int] = list(binary[start:end + 1])
 
         # If overflow (i.e last instruction has fewer than instr_len bits) then pad empty bytes
         if len(instruction_bits) != end - start + 1:

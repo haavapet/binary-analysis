@@ -1,6 +1,15 @@
 import heapq
 from collections import Counter
+from typing import NamedTuple
 
+
+class Candidate(NamedTuple):
+    probability_value: float
+    hits: int
+    counter: int
+    call_candidate: int
+    ret_candidate: int
+    step: int
 
 def find_best_candidates(
         instructions: list,
@@ -10,7 +19,8 @@ def find_best_candidates(
         call_candidate_range: list,
         ret_candidate_range: list,
         return_to_function_prologue_distance: int,
-    ) -> list:
+    ) -> list[Candidate]:
+
     valid_call_candidates = (Counter([e.call_opcode for e in instructions])
                              .most_common(call_candidate_range[1])[call_candidate_range[0]:])
     valid_ret_candidates = ([e for e, _ in Counter([e.ret_opcode for e in instructions])
@@ -18,7 +28,7 @@ def find_best_candidates(
 
     hit_map = {e.ret_opcode: 0 for e in instructions}
 
-    best_hits = []
+    best_candidates: list[Candidate] = []
 
     # hashmap (instr -> hits)   i.e 'ret' -> 10
     # TODO INSERT CALL_CANDIDATE_RANGE
@@ -37,21 +47,19 @@ def find_best_candidates(
                         hit_map[instructions[address].ret_opcode] += 1
 
 
-            for ret_cand, hits in hit_map.items():
-                # some random "probability" value. normalized between 0 and 1
+            for ret_candidate, hits in hit_map.items():
+                # "probability" value. normalized between 0 and 1
                 probability_value = (2 * (hits / counter) + (valid_operand / counter)) / 3
-                if ret_cand in valid_ret_candidates and ret_cand != call_candidate:
-                    if len(best_hits) <= nr_candidates:
-                        heapq.heappush(best_hits,
-                                       (probability_value, hits, counter,
-                                        call_candidate, ret_cand, step))
+                if ret_candidate in valid_ret_candidates and ret_candidate != call_candidate:
+                    candidate: Candidate = Candidate(probability_value, hits, counter,
+                                            call_candidate, ret_candidate, step)
+                    if len(best_candidates) <= nr_candidates:
+                        heapq.heappush(best_candidates, candidate)
                     else:
-                        heapq.heappushpop(best_hits,
-                                          (probability_value, hits, counter,
-                                           call_candidate, ret_cand, step))
+                        heapq.heappushpop(best_candidates, candidate)
 
             # reset
             for key in hit_map:
                 hit_map[key] = 0
 
-    return heapq.nlargest(nr_candidates, best_hits)
+    return heapq.nlargest(nr_candidates, best_candidates)

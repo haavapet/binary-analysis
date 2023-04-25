@@ -1,12 +1,13 @@
-from .models.function_block_node import FunctionBlockNode
+from .models.instruction import Instruction
+from .models.response_model import GraphNode
 
 
-def create_graphs(instrs: list,
+def create_graphs(instrs: list[Instruction],
                   call_candidate: int,
                   ret_candidate: int,
                   pc_inc_per_instr: int,
                   pc_offset: int,
-                  step: int) -> list:
+                  step: int) -> list[GraphNode]:
     # Find all function prologues
     function_prologues = []
     for e in instrs:
@@ -21,11 +22,10 @@ def create_graphs(instrs: list,
                 e.call_instruction = instrs[address + step]
 
     # Assume first instruction is entry point, and take unique function prologues and sort them
-    # TODO add end of file variable
     function_prologues = sorted({0} | set(function_prologues) | {len(instrs)})
 
     # list of nodes of function blocks
-    function_blocks = []
+    function_blocks: list[GraphNode] = []
 
     # fill function block values of all instructions in a function block
     fbs = [(instrs[start:end], start, end)
@@ -33,16 +33,15 @@ def create_graphs(instrs: list,
     for i, (fb, start, end) in enumerate(fbs):
         for instr in fb:
             instr.function_block = i
-        function_blocks += [FunctionBlockNode(fb, i, start, end)]
+        function_blocks += [GraphNode({"f_id": i, "start": start, "end": end, "calls_f_id": set()})]
 
     # point the function block to all other function block it calls
     #   (using the pointer to the other instruction, which states the function block it belongs to)
-    for fb in function_blocks:
-        called_functions = []
-        for instr in fb.instructions:
-            if instr.call_instruction is not None:
-                called_functions += [instr.call_instruction.function_block]
-        fb.called_function_blocks = called_functions
+    for function_block in function_blocks:
+        start, end = function_block["start"], function_block["end"]
+        for instr in instrs[start:end]:
+            if (instr.call_instruction is not None
+                and instr.call_instruction.function_block is not None):
+                function_block["calls_f_id"].add(instr.call_instruction.function_block)
 
-    return [{"f_id": e.id, "calls_f_id": list(set(e.called_function_blocks)),
-             "start": e.start, "end": e.end} for e in function_blocks]
+    return function_blocks

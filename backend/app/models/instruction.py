@@ -1,6 +1,9 @@
+from typing import Union
+
+
 class Instruction():
-    call_instruction = None # TODO rename this
-    function_block = None
+    call_instruction: Union["Instruction", None] = None # TODO rename this
+    function_block: Union[int, None] = None
     # TODO: opcode may not be first bits, and we are assuming that
     #  call instruction only consists of opcode and operand
     def __init__(self: "Instruction",
