@@ -43,7 +43,7 @@ jobs:
 
       - name: Lint with ruff
         run: |
-          python -m poetry run ruff --format=github --target-version=py37 .
+          poetry run ruff --format=github --target-version=py37 .
 
       - name: Static type check with MyPy
         run: |
