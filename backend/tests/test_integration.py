@@ -5,21 +5,22 @@ from fastapi.testclient import TestClient
 from ..app.controller import app
 
 client = TestClient(app)
+
 def test_integration() -> None:
 
     data={
-            "instructionLength":16,
-            "endiannes":"big",
-            "retOpcodeLength":16,
-            "callOpcodeLength":4,
-            "fileOffset":0,
-            "fileOffsetEnd": 0x430,
-            "pcOffset":0x200,
-            "pcIncPerInstr":2,
-            "callCandidateRange": [3, 7],
-            "retCandidateRange":[0,10],
-            "returnToFunctionPrologueDistance":4,
-            "nrCandidates":4,
+            "instructionLength": "16",
+            "endiannes": "big",
+            "retOpcodeLength": "16",
+            "callOpcodeLength": "4",
+            "fileOffset": "0",
+            "fileOffsetEnd": str(0x430),
+            "pcOffset": str(0x200),
+            "pcIncPerInstr": "2",
+            "callCandidateRange": ["3", "7"],
+            "retCandidateRange":["0", "10"],
+            "returnToFunctionPrologueDistance": "4",
+            "nrCandidates": "1",
         }
 
     filename = '../binaries/quar.ch8'
@@ -36,5 +37,10 @@ def test_integration() -> None:
 
     assert res.status_code == 200
 
-    best_probability = json.loads(res.content)["cfgs"][0]["probability"]
-    assert best_probability > 0.9
+    top_graph = json.loads(res.content)["cfgs"][0]
+
+    assert top_graph["probability"] > 0.9
+
+    assert top_graph["call_opcode"] == 0x2000
+
+    assert top_graph["ret_opcode"] == 0x00EE

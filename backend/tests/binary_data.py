@@ -1,6 +1,6 @@
-from ..app.models.instruction import Instruction
+from ..app.services.instruction_service import Instruction
 
-# hardcoded binary data for testing purposes
+# hardcoded binary data of quar.ch8 for testing purposes
 binary = "0x24 0xC6 0x24 0xFE 0xF1 0x0A 0x24 0xC6 0x64 0x00 0x63 0x00 0x6B 0x00 0x6E 0xFF\
             0x6A 0x14 0x6D 0x40 0x6C 0x64 0x67 0x01 0x66 0x00 0x4E 0x00 0x24 0x5C 0x46 0x03\
             0x13 0x38 0x34 0x00 0x12 0x3C 0xC1 0x03 0x37 0x01 0x12 0x32 0x88 0x14 0x78 0x01\
@@ -69,7 +69,20 @@ binary = "0x24 0xC6 0x24 0xFE 0xF1 0x0A 0x24 0xC6 0x64 0x00 0x63 0x00 0x6B 0x00 
             0x47 0x01 0xA6 0x67 0xD8 0x98 0x78 0x08 0xA6 0x5F 0x47 0x01 0xA6 0x6F 0xD8 0x98\
             0x78 0xF8 0x00 0xEE 0xA6 0x77 0xD8 0x96 0x78 0x08 0xA6 0x7D 0xD8 0x96 0x00 0xEE"
 
+valid_call_edges = [(3, 355), (267, 383), (284, 338), (414, 530), (144, 199), (104, 349),
+                    (221, 391), (307, 409), (339, 349), (288, 338), (213, 338), (211, 316),
+                    (405, 511), (129, 402), (151, 402), (206, 402), (14, 302), (194, 391),
+                    (0, 355), (157, 369), (412, 516), (276, 338), (410, 506), (152, 290),
+                    (47, 402), (210, 402), (135, 402), (1, 383), (46, 391), (268, 391),
+                    (248, 416), (280, 338), (403, 506), (269, 402), (45, 383), (407, 519),
+                    (29, 402), (197, 391), (219, 391)]
+
 def get_test_instructions() -> list[Instruction]:
     binary_splitted = binary.split()
-    return [Instruction(int(e + a[2:], 16), 16, 16, 4)
-            for e, a in zip(binary_splitted[::2], binary_splitted[1::2])]
+    instruction_values = [int(e + a[2:], 16)
+                          for e, a in zip(binary_splitted[::2], binary_splitted[1::2])]
+
+    return [Instruction(e, 16, 4, 16) for e in instruction_values]
+
+def get_test_valid_call_edges() -> list[tuple[int, int]]:
+    return valid_call_edges

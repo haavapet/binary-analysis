@@ -14,7 +14,7 @@ packages = [
 ]
 
 [tool.poetry.scripts]
-start = "app.controller:start"
+start = "run:start"
 
 
 [tool.poetry.dependencies]
@@ -32,9 +32,11 @@ httpx = "^0.24.0"
 
 [tool.ruff]
 select = ["E", "F", "W", "I", "N", "A", "COM", "C4", "PIE", "T20", "PT", "SIM", "ARG", "ANN"]
+ignore = ["ANN101"]
 line-length = 100
 
 # TODO location of model to custom file
 [tool.ruff.per-file-ignores]
 "app/models/base_form.py" = ["N815"]
 "tests/test_integration.py" = ["N815"]
+"app/services/instruction_service.py" = ["ARG003"]
