@@ -19,6 +19,7 @@ const initialState = {
     retCandidateRange: [null, null],
     returnToFunctionPrologueDistance: null,
     nrCandidates: null,
+    unknownCodeEntry: false,
   },
 };
 

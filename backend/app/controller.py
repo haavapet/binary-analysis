@@ -33,14 +33,15 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
     # Max heap that sorts based on the first value of tuple inserted (which is probability)
     candidates = Heap(form.nr_cand)
 
-    # TODO this is where wer will iterate over if we need to search code entry in binary file
-    # PROBLEM: different instruction values needs to be returned to frontend :((
-    for bit_index in range(1):
+    # If unknown code section, then we iterate over instr_len bits to ensure we have
+    #   all possible start indices to get the correct instructions
+    for bit_index in range(form.instr_len if form.unknown_code_entry else 1):
         instructions: list[Instruction] = extract_instructions(form.binary_data,
                                                                form.endiannes,
                                                                form.instr_len,
                                                                form.call_len,
-                                                               form.ret_len)
+                                                               form.ret_len,
+                                                               bit_index)
 
 
         for call_opcode, call_count in get_call_candidates_counter(instructions,
@@ -62,7 +63,6 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
                                                               len(valid_call_edges),
                                                               call_count)
                 candidates.append((probability, call_opcode, ret_opcode, valid_call_edges))
-
 
     # This needs to be refactored, only create graph after above for loop, but need to
     # append instruction values in above for loop

@@ -35,9 +35,10 @@ def extract_instructions(
         instr_len: int,
         call_len: int,
         ret_len: int,
+        bit_index: int,
     ) -> list[Instruction]:
 
-    instruction_values: list[int] = _extract_instruction(binary, endiannes, instr_len)
+    instruction_values: list[int] = _extract_instruction(binary, endiannes, instr_len, bit_index)
     return [Instruction(e, instr_len, call_len, ret_len) for e in instruction_values]
 
 
@@ -45,12 +46,13 @@ def _extract_instruction(
         binary: bytes,
         endiannes: str,
         instr_length: int,
+        bit_index: int,
     ) -> list[int]:
 
     instructions: list[int] = []
 
     # iterate through instructions
-    for j in range(0, len(binary) * BYTE_LENGTH, instr_length):
+    for j in range(bit_index, len(binary) * BYTE_LENGTH, instr_length):
 
         start, start_offset = divmod(j, BYTE_LENGTH)
         end, end_offset = divmod(j + instr_length, BYTE_LENGTH)
