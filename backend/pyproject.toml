@@ -22,6 +22,7 @@ python = "^3.8"
 python-multipart = "^0.0.6"
 fastapi = "^0.95.0"
 uvicorn = "^0.20.0"
+pydantic = "^1.10.7"
 
 [tool.poetry.dev-dependencies]
 mypy = "^1.2.0"
@@ -37,6 +38,5 @@ line-length = 100
 
 # TODO location of model to custom file
 [tool.ruff.per-file-ignores]
-"app/models/base_form.py" = ["N815"]
 "tests/test_integration.py" = ["N815"]
 "app/services/instruction_service.py" = ["ARG003"]
