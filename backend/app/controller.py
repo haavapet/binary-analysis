@@ -19,29 +19,20 @@ from .utils.heap import Heap
 
 app = FastAPI()
 
-origins = [
-    "http://localhost",
-    "http://localhost:8000",
-    "http://localhost:3000",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:8000", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-
-# TODO move this to /controllers folder, rest of services to /services
-# TODO move all code inside here inside a new service (main), and just call it from controller
 @app.post("/api", response_model=ResponseModel)
 async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> ResponseModel:
 
     # Max heap that sorts based on the first value of tuple inserted (which is probability)
     candidates = Heap(form.nr_cand)
+
     # TODO this is where wer will iterate over if we need to search code entry in binary file
     # PROBLEM: different instruction values needs to be returned to frontend :((
     for bit_index in range(1):
