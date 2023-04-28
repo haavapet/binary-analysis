@@ -93,7 +93,7 @@ def _extract_instruction(
 
 def get_call_candidates_counter(
         instructions: list[Instruction],
-        call_search_range: tuple[int, int],
+        call_search_range: list[int],
     ) -> list[tuple[int, int]]:
 
     call_opcodes = [e.call_opcode for e in instructions]
@@ -104,7 +104,7 @@ def get_call_candidates_counter(
 
 def get_ret_candidates_counter(
         instructions: list[Instruction],
-        ret_search_range: tuple[int, int],
+        ret_search_range: list[int],
     ) -> list[tuple[int, int]]:
 
     ret_opcodes = [e.ret_opcode for e in instructions]
