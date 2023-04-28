@@ -9,7 +9,23 @@ class FormDataModel(FormBaseModel):
 
     Attributes:
         instr_len (int): (class attribute) Length of instruction in bits
-        instance_attribute (str): The instance attribute
+        ret_len (int): (class attribute) Length of instruction ret opcode in bits
+        call_len (int): (class attribute) Length of instruction call opcode in bits
+        file_offset (int): (class attribute) Byte position of code section start in binary
+        file_offset_end (int): (class attribute) Byte position of code section end in binary
+        pc_offset (int): (class attribute) position of first instruction in virtual memory
+        pc_inc (int): (class attribute) How much pc increases between each instruction
+        endiannes (str): (class attribute) "big" or "little"
+        nr_cand (int): (class attribute) How many graph candidates to return
+        call_search_range (list): (class attribute) (x, y) -> call is known
+                                                    to be between the x and y most
+                                                    popular instructions
+        ret_search_range (list): (class attribute) (x, y) -> ret is known
+                                                    to be between the x and y most
+                                                    popular instructions
+        ret_func_dist (int): (class attribute) Distance from function prologue to prvious ret
+        file (UploadFile): (class attribute) Binary file to be analysed
+        binary_data (bytes): (class attribute) Bytes of code section of binary file
     """
     instr_len: int = Field(alias="instructionLength")
     ret_len: int = Field(alias="retOpcodeLength")
