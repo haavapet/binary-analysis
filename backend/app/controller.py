@@ -13,6 +13,7 @@ from .services.instruction_service import (
     Instruction,
     extract_instructions,
     get_call_candidates_counter,
+    get_code_start_and_end,
     get_ret_candidates_counter,
 )
 from .utils.heap import Heap
@@ -33,15 +34,24 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
     # Max heap that sorts based on the first value of tuple inserted (which is probability)
     candidates = Heap(form.nr_cand)
 
-    # TODO this is where wer will iterate over if we need to search code entry in binary file
-    # PROBLEM: different instruction values needs to be returned to frontend :((
-    for bit_index in range(1):
-        instructions: list[Instruction] = extract_instructions(form.binary_data,
+    binary_file: bytes = form.binary_data
+
+    # Do not include instructions for files greater than 1mb
+    if len(binary_file) > 10**6:
+        form.do_not_include_instruction = True
+
+    possible_code_start_end: list[tuple[int, int]] = get_code_start_and_end(len(binary_file),
+                                                                            form.instr_len,
+                                                                            form.unknown_code_entry,
+                                                                            form.file_offset,
+                                                                            form.file_offset_end)
+
+    for start, end in possible_code_start_end:
+        instructions: list[Instruction] = extract_instructions(binary_file[start:end],
                                                                form.endiannes,
                                                                form.instr_len,
                                                                form.call_len,
                                                                form.ret_len)
-
 
         for call_opcode, call_count in get_call_candidates_counter(instructions,
                                                                    form.call_search_range):
@@ -54,30 +64,34 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
                                                                                     form.pc_offset)
 
             for ret_opcode, _ in get_ret_candidates_counter(instructions, form.ret_search_range):
-                valid_call_edges = filter_valid_call_edges(instructions,
-                                                           ret_opcode,
-                                                           potential_call_edges,
-                                                           form.ret_func_dist)
+                valid_call_edges: list[tuple[int, int]] = filter_valid_call_edges(instructions,
+                                                                                  ret_opcode,
+                                                                                  potential_call_edges,
+                                                                                  form.ret_func_dist)
                 probability = probability_of_valid_call_edges(len(potential_call_edges),
                                                               len(valid_call_edges),
                                                               call_count)
-                candidates.append((probability, call_opcode, ret_opcode, valid_call_edges))
-
+                candidates.add((probability,
+                                call_opcode,
+                                ret_opcode,
+                                valid_call_edges,
+                                instructions))
 
     # This needs to be refactored, only create graph after above for loop, but need to
     # append instruction values in above for loop
-    candidates_with_graph: list[ControlFlowGraph] = []
-    for prob, call, ret, valid_call_edges in candidates.values():
+    control_flow_graphs: list[ControlFlowGraph] = []
+    for prob, call, ret, valid_call_edges, instructions in candidates.values():
         graph_nodes: list[GraphNode] = create_graphs(instructions, valid_call_edges)
+
         graph: ControlFlowGraph = {
+            "instructions": instructions if not form.do_not_include_instruction  else [],
             "probability": prob,
             "ret_opcode": ret,
             "call_opcode": call,
             "graph": graph_nodes,
         }
-        candidates_with_graph.append(graph)
+        control_flow_graphs.append(graph)
 
-
-    result: ResponseModel = {"instructions": instructions, "cfgs": candidates_with_graph}
+    result: ResponseModel = {"cfgs": control_flow_graphs}
     return result
 
