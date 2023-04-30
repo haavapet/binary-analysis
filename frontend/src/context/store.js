@@ -11,8 +11,8 @@ const initialState = {
     endiannes: "big",
     retOpcodeLength: null,
     callOpcodeLength: null,
-    fileOffset: null,
-    fileOffsetEnd: null,
+    fileOffset: 0,
+    fileOffsetEnd: 0,
     pcOffset: null,
     pcIncPerInstr: null,
     callCandidateRange: [null, null],
@@ -20,6 +20,7 @@ const initialState = {
     returnToFunctionPrologueDistance: null,
     nrCandidates: null,
     unknownCodeEntry: false,
+    doNotIncludeInstructions: false,
   },
 };
 

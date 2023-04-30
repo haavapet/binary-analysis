@@ -88,69 +88,6 @@ const FormPage = () => {
       </Row>
       <Row>
         <Col>
-          <Form.Group className="mb-3" controlId="formGroupFileOffset">
-            <Form.Label>File offset start&nbsp;</Form.Label>
-            <OverlayTrigger
-              placement={"right"}
-              overlay={<Tooltip>Byte position of where in the file the code section starts</Tooltip>}
-            >
-              <i className="fa fa-question-circle" />
-            </OverlayTrigger>
-            <InputGroup>
-              <InputGroup.Text>0x</InputGroup.Text>
-              <Form.Control
-                required
-                value={
-                  formData.fileOffset
-                    ? formData.fileOffset.toString(16).toUpperCase()
-                    : formData.fileOffset === 0
-                    ? 0
-                    : ""
-                }
-                placeholder="Ex. 0"
-                onChange={(e) => {
-                  const input = e.currentTarget.value;
-                  if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || input === "") {
-                    setFormElement("fileOffset", parseInt(e.target.value, 16));
-                  }
-                }}
-              />
-            </InputGroup>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="formGroupFileOffsetEnd">
-            <Form.Label>File offset end&nbsp;</Form.Label>
-            <OverlayTrigger
-              placement={"right"}
-              overlay={<Tooltip>Byte position of where in the file the code section ends</Tooltip>}
-            >
-              <i className="fa fa-question-circle" />
-            </OverlayTrigger>
-            <InputGroup>
-              <InputGroup.Text>0x</InputGroup.Text>
-              <Form.Control
-                required
-                value={
-                  formData.fileOffsetEnd
-                    ? formData.fileOffsetEnd.toString(16).toUpperCase()
-                    : formData.fileOffsetEnd === 0
-                    ? 0
-                    : ""
-                }
-                placeholder="Ex. 430"
-                onChange={(e) => {
-                  if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || e.currentTarget.value === "") {
-                    setFormElement("fileOffsetEnd", parseInt(e.target.value, 16));
-                  }
-                }}
-              />
-            </InputGroup>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
           <Form.Group className="mb-3" controlId="formGroupPcOffset">
             <Form.Label>PC offset&nbsp;</Form.Label>
             <OverlayTrigger
@@ -326,6 +263,93 @@ const FormPage = () => {
               value={formData.nrCandidates ?? ""}
               placeholder="Ex. 4"
               onChange={(e) => setFormElement("nrCandidates", e.target.value)}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="formGroupFileOffset">
+            <Form.Label>File offset start&nbsp;</Form.Label>
+            <OverlayTrigger
+              placement={"right"}
+              overlay={<Tooltip>Byte position of where in the file the code section starts</Tooltip>}
+            >
+              <i className="fa fa-question-circle" />
+            </OverlayTrigger>
+            <InputGroup>
+              <InputGroup.Text>0x</InputGroup.Text>
+              <Form.Control
+                required
+                disabled={formData.unknownCodeEntry}
+                value={
+                  formData.fileOffset
+                    ? formData.fileOffset.toString(16).toUpperCase()
+                    : formData.fileOffset === 0
+                    ? 0
+                    : ""
+                }
+                placeholder="Ex. 0"
+                onChange={(e) => {
+                  const input = e.currentTarget.value;
+                  if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || input === "") {
+                    setFormElement("fileOffset", parseInt(e.target.value, 16));
+                  }
+                }}
+              />
+            </InputGroup>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="formGroupFileOffsetEnd">
+            <Form.Label>File offset end&nbsp;</Form.Label>
+            <OverlayTrigger
+              placement={"right"}
+              overlay={<Tooltip>Byte position of where in the file the code section ends</Tooltip>}
+            >
+              <i className="fa fa-question-circle" />
+            </OverlayTrigger>
+            <InputGroup>
+              <InputGroup.Text>0x</InputGroup.Text>
+              <Form.Control
+                required
+                disabled={formData.unknownCodeEntry}
+                value={
+                  formData.fileOffsetEnd
+                    ? formData.fileOffsetEnd.toString(16).toUpperCase()
+                    : formData.fileOffsetEnd === 0
+                    ? 0
+                    : ""
+                }
+                placeholder="Ex. 430"
+                onChange={(e) => {
+                  if (/^[0-9A-Fa-f]+$/.test(e.currentTarget.value) || e.currentTarget.value === "") {
+                    setFormElement("fileOffsetEnd", parseInt(e.target.value, 16));
+                  }
+                }}
+              />
+            </InputGroup>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="formGroupFileOffsetEnd">
+            <Form.Label>Unknown code section&nbsp;</Form.Label>
+            <OverlayTrigger
+              placement={"right"}
+              overlay={
+                <Tooltip>
+                  If you do not know the start and end point of the code section of the binary, you can toggle this. Be
+                  aware that this drastically increase the duration it takes to analyse the binary file, due to the
+                  increased search space.
+                </Tooltip>
+              }
+            >
+              <i className="fa fa-question-circle" />
+            </OverlayTrigger>
+            <Form.Check
+              type="switch"
+              onChange={(e) => setFormElement("unknownCodeEntry", e.target.checked)}
+              checked={formData.unknownCodeEntry}
             />
           </Form.Group>
         </Col>

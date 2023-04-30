@@ -13,7 +13,7 @@ class Heap():
         self.candidates: list = []
         self.nr_candidates = nr_candidates
 
-    def append(self, candidate: tuple) -> None:
+    def add(self, candidate: tuple) -> None:
         sortable_candidate = SortableTuple(candidate[0], candidate)
         if len(self.candidates) <= self.nr_candidates:
             heapq.heappush(self.candidates, sortable_candidate)

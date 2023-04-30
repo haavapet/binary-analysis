@@ -35,10 +35,9 @@ def extract_instructions(
         instr_len: int,
         call_len: int,
         ret_len: int,
-        bit_index: int,
     ) -> list[Instruction]:
 
-    instruction_values: list[int] = _extract_instruction(binary, endiannes, instr_len, bit_index)
+    instruction_values: list[int] = _extract_instruction(binary, endiannes, instr_len)
     return [Instruction(e, instr_len, call_len, ret_len) for e in instruction_values]
 
 
@@ -46,13 +45,12 @@ def _extract_instruction(
         binary: bytes,
         endiannes: str,
         instr_length: int,
-        bit_index: int,
     ) -> list[int]:
 
     instructions: list[int] = []
 
     # iterate through instructions
-    for j in range(bit_index, len(binary) * BYTE_LENGTH, instr_length):
+    for j in range(0, len(binary) * BYTE_LENGTH, instr_length):
 
         start, start_offset = divmod(j, BYTE_LENGTH)
         end, end_offset = divmod(j + instr_length, BYTE_LENGTH)
@@ -91,6 +89,26 @@ def _extract_instruction(
         instructions.append(reduce(ior, instruction_bits))
 
     return instructions
+
+def get_code_start_and_end(binary_file_len: int,
+                           instr_len: int,
+                           unknown_code_entry: bool,
+                           file_offset: int,
+                           file_offset_end: int) -> list[tuple[int, int]]:
+    result: list[tuple[int, int]] = []
+    if unknown_code_entry:
+        for byte_index in range(instr_len // 8):
+            for start in range(0, 41, 2):
+                for end in range(60, 101, 2):
+                    start_offset: int = binary_file_len*start//100
+                    end_offset: int = binary_file_len*end//100
+                    while (start_offset % instr_len != byte_index) and start_offset > 0:
+                        start_offset -= 1
+                    result += [(start_offset, end_offset)]
+    else:
+        result += [(file_offset, file_offset_end)]
+
+    return result
 
 
 def get_call_candidates_counter(

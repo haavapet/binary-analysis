@@ -32,13 +32,13 @@ const GraphPage = () => {
           modalIsOpen={modalIsOpen}
           closeModal={closeModal}
           activeModalNode={activeModalNode}
-          instructions={graphData?.instructions}
+          instructions={graphData.cfgs[selectedGraph].instructions}
         />
         <Row style={{ textAlign: "center" }}>
           <h2>Graph {selectedGraph + 1}</h2>
         </Row>
         <Row style={{ height: "80%", backgroundColor: "#ddd", width: "80%" }}>
-          <Graph graph={graphData.cfgs[selectedGraph]?.graph} openModal={openModal} />
+          <Graph graph={graphData.cfgs[selectedGraph].graph} openModal={openModal} />
         </Row>
         <Row style={{ marginTop: "20px", textAlign: "center" }}>
           <GraphButton left onClick={() => setSelectedGraph(selectedGraph - 1)} disabled={selectedGraph === 0} />

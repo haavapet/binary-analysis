@@ -22,6 +22,7 @@ def test_integration() -> None:
             "returnToFunctionPrologueDistance": "4",
             "nrCandidates": "1",
             "unknownCodeEntry": False,
+            "doNotIncludeInstructions": False,
         }
 
     filename = '../binaries/quar.ch8'
