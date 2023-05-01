@@ -20,7 +20,7 @@ const initialState = {
     returnToFunctionPrologueDistance: null,
     nrCandidates: null,
     unknownCodeEntry: false,
-    doNotIncludeInstructions: false,
+    includeInstructions: true,
   },
 };
 

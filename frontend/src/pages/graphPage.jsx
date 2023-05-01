@@ -33,6 +33,8 @@ const GraphPage = () => {
           closeModal={closeModal}
           activeModalNode={activeModalNode}
           instructions={graphData.cfgs[selectedGraph].instructions}
+          retOpcode={graphData.cfgs[selectedGraph].ret_opcode}
+          callOpcode={graphData.cfgs[selectedGraph].call_opcode}
         />
         <Row style={{ textAlign: "center" }}>
           <h2>Graph {selectedGraph + 1}</h2>

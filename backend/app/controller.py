@@ -36,10 +36,6 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
 
     binary_file: bytes = form.binary_data
 
-    # Do not include instructions for files greater than 1mb
-    if len(binary_file) > 10**6:
-        form.do_not_include_instruction = True
-
     possible_code_start_end: list[tuple[int, int]] = get_code_start_and_end(len(binary_file),
                                                                             form.instr_len,
                                                                             form.unknown_code_entry,
@@ -84,7 +80,7 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
         graph_nodes: list[GraphNode] = create_graphs(instructions, valid_call_edges)
 
         graph: ControlFlowGraph = {
-            "instructions": instructions if not form.do_not_include_instruction  else [],
+            "instructions": instructions if form.include_instruction  else [],
             "probability": prob,
             "ret_opcode": ret,
             "call_opcode": call,
@@ -94,4 +90,3 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
 
     result: ResponseModel = {"cfgs": control_flow_graphs}
     return result
-

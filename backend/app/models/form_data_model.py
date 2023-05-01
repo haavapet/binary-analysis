@@ -40,7 +40,7 @@ class FormDataModel(FormBaseModel):
     ret_search_range: list[int] = Field(alias="retCandidateRange")
     ret_func_dist: int = Field(alias="returnToFunctionPrologueDistance")
     unknown_code_entry: bool = Field(alias="unknownCodeEntry")
-    do_not_include_instruction: bool = Field(alias="doNotIncludeInstructions")
+    include_instruction: bool = Field(alias="includeInstructions")
     file: UploadFile = Field(alias="file")
 
 

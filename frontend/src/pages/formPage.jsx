@@ -353,6 +353,27 @@ const FormPage = () => {
             />
           </Form.Group>
         </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="formGroupFileOffsetEnd">
+            <Form.Label>Include instructions&nbsp;</Form.Label>
+            <OverlayTrigger
+              placement={"right"}
+              overlay={
+                <Tooltip>
+                  Whether to include parsed instructions from the API call. It is recommended to turn this toggle off if
+                  the size of the binary file is large (&gt;1mb)
+                </Tooltip>
+              }
+            >
+              <i className="fa fa-question-circle" />
+            </OverlayTrigger>
+            <Form.Check
+              type="switch"
+              onChange={(e) => setFormElement("includeInstructions", e.target.checked)}
+              checked={formData.includeInstructions}
+            />
+          </Form.Group>
+        </Col>
       </Row>
     </Form>
   );
