@@ -19,14 +19,9 @@ class Instruction(int):
                  call_len: int,
                  ret_len: int) -> None:
 
-        self.ret_opcode = (instruction &
-                           ((MAX_INSTRUCTION_VALUE >> (MAX_INSTRUCTION_LENGTH-instr_len))
-                             << (instr_len - ret_len)))
-        self.call_opcode = (instruction &
-                            ((MAX_INSTRUCTION_VALUE >> (MAX_INSTRUCTION_LENGTH-instr_len))
-                             << (instr_len - call_len)))
-        self.call_operand = (instruction &
-                             (MAX_INSTRUCTION_VALUE >> (MAX_INSTRUCTION_LENGTH-instr_len+call_len)))
+        self.ret_opcode: int = (instruction  >> (instr_len - ret_len)) << (instr_len - ret_len)
+        self.call_opcode: int =  (instruction  >> (instr_len - call_len)) << (instr_len - call_len)
+        self.call_operand: int = instruction & ((1 << (instr_len - call_len)) - 1)
 
 
 def extract_instructions(
