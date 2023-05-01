@@ -24,7 +24,7 @@ def find_potential_call_edges(
         # and the pc counter it addresses is not outside the length of instructions we have
         if (e.call_opcode == call_candidate
             and (e.call_operand - pc_offset) % pc_inc == 0
-            and 0 < (address := (e.call_operand - pc_offset) // pc_inc) < len(instructions)):
+            and 0 <= (address := (e.call_operand - pc_offset) // pc_inc) < len(instructions)):
                 valid_call_edges += [(i, address)]
 
     return valid_call_edges
