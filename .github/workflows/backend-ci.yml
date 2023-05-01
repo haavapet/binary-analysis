@@ -39,7 +39,7 @@ jobs:
 
       - name: Static type check with MyPy
         run: |
-          poetry run mypy app/*.py app/models/*.py
+          poetry run mypy .
 
       - name: Test with pytest
         run: |

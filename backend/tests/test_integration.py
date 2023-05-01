@@ -21,8 +21,8 @@ def test_integration() -> None:
             "retCandidateRange":["0", "10"],
             "returnToFunctionPrologueDistance": "4",
             "nrCandidates": "1",
-            "unknownCodeEntry": False,
-            "includeInstructions": False,
+            "unknownCodeEntry": "False",
+            "includeInstructions": "False",
         }
 
     filename = '../binaries/quar.ch8'
