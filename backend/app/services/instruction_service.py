@@ -121,7 +121,7 @@ def get_call_candidates_counter(
         call_search_range: list[int],
     ) -> list[tuple[int, int]]:
     """
-    Returns a Counter object containing all call opcodes in the range given, for the
+    Returns a list containing all call opcodes and their count in the range given, for the
     list of instructions provided
     """
 
@@ -136,7 +136,7 @@ def get_ret_candidates_counter(
         ret_search_range: list[int],
     ) -> list[tuple[int, int]]:
     """
-    Returns a Counter object containing all ret opcodes in the range given, for the
+    Returns a list containing all ret opcodes and their count in the range given, for the
     list of instructions provided
     """
     ret_opcodes = [e.ret_opcode for e in instructions]
