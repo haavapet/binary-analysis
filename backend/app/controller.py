@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .models.form_data_model import FormDataModel
-from .models.response_model import ControlFlowGraph, GraphNode, ResponseModel
+from .models.response_model import ControlFlowGraph, ResponseModel
 from .services.function_detection_service import (
     filter_valid_call_edges,
     find_potential_call_edges,
@@ -10,7 +10,6 @@ from .services.function_detection_service import (
 )
 from .services.graph_service import create_graphs
 from .services.instruction_service import (
-    Instruction,
     extract_instructions,
     get_call_candidates_counter,
     get_code_start_and_end,
@@ -34,50 +33,70 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
     # Max heap that sorts based on the first value of tuple inserted (which is probability)
     candidates = Heap(form.nr_cand)
 
-    binary_file: bytes = form.binary_data
+    # Get the binary data
+    binary_data = form.binary_data
 
-    possible_code_start_end: list[tuple[int, int]] = get_code_start_and_end(len(binary_file),
-                                                                            form.instr_len,
-                                                                            form.unknown_code_entry,
-                                                                            form.file_offset,
-                                                                            form.file_offset_end)
+    # Get either (form.file_offset, form.file_offset_end) or a list of tuples of possible offsets
+    possible_code_start_end = get_code_start_and_end(len(binary_data),
+                                                     form.instr_len,
+                                                     form.unknown_code_entry,
+                                                     form.file_offset,
+                                                     form.file_offset_end)
 
-    for start, end in possible_code_start_end:
-        instructions: list[Instruction] = extract_instructions(binary_file[start:end],
-                                                               form.endiannes,
-                                                               form.instr_len,
-                                                               form.call_len,
-                                                               form.ret_len)
+    # For byte alignment, ie if instrlen is 16 we iterate over 0 and 1 to get the correct alignment
+    for byte_index in range(form.instr_len // 8):
 
-        for call_opcode, call_count in get_call_candidates_counter(instructions,
-                                                                   form.call_search_range):
-            # Find call edges, I.e the (address, call_address)
-            # where address is the index of the call instruction, and call_address
-            # is the instruction it points to
-            potential_call_edges: list[tuple[int, int]] = find_potential_call_edges(instructions,
-                                                                                    call_opcode,
-                                                                                    form.pc_inc,
-                                                                                    form.pc_offset)
+        # Extract instructions based on byte alignment
+        instructions = extract_instructions(binary_data[byte_index:],
+                                            form.endiannes,
+                                            form.instr_len,
+                                            form.call_len,
+                                            form.ret_len)
 
-            for ret_opcode, _ in get_ret_candidates_counter(instructions, form.ret_search_range):
-                valid_call_edges: list[tuple[int, int]] = filter_valid_call_edges(instructions,
-                                                                                  ret_opcode,
-                                                                                  potential_call_edges,
-                                                                                  form.ret_func_dist)
-                probability = probability_of_valid_call_edges(len(potential_call_edges),
-                                                              len(valid_call_edges),
-                                                              call_count)
-                candidates.add((probability,
-                                call_opcode,
-                                ret_opcode,
-                                valid_call_edges,
-                                instructions))
+        # Iterate over all possible file offsets
+        for start, end in possible_code_start_end:
 
-    # This needs to be refactored, only create graph after above for loop, but need to
-    # append instruction values in above for loop
-    control_flow_graphs: list[ControlFlowGraph] = []
+            # Get the correct slice of instructions
+            current_instructions = instructions[start:end]
+
+            # Iterate over possible call candidates based on the range provided
+            for call_opcode, call_count in get_call_candidates_counter(current_instructions,
+                                                                       form.call_search_range):
+
+                # Find potential edges for the call instructions
+                potential_call_edges = find_potential_call_edges(current_instructions,
+                                                                 call_opcode,
+                                                                 form.pc_inc,
+                                                                 form.pc_offset)
+
+                # Iterate over possible ret candidates based on the range provided
+                for ret_opcode, _ in get_ret_candidates_counter(current_instructions,
+                                                                form.ret_search_range):
+
+                    # Determine if the potential call edges are valid, i.e close enough to a return
+                    valid_call_edges = filter_valid_call_edges(current_instructions,
+                                                               ret_opcode,
+                                                               potential_call_edges,
+                                                               form.ret_func_dist)
+
+                    # Calculate probability of this combination of call and ret being correct
+                    probability = probability_of_valid_call_edges(len(potential_call_edges),
+                                                                  len(valid_call_edges),
+                                                                  call_count)
+
+                    # Add to the heap
+                    candidates.add((probability,
+                                    call_opcode,
+                                    ret_opcode,
+                                    valid_call_edges,
+                                    current_instructions))
+
+
+    control_flow_graphs = []
+
+    # Iterate over all candidates remaining in heap and create graph
     for prob, call, ret, valid_call_edges, instructions in candidates.values():
-        graph_nodes: list[GraphNode] = create_graphs(instructions, valid_call_edges)
+        graph_nodes = create_graphs(instructions, valid_call_edges)
 
         graph: ControlFlowGraph = {
             "instructions": instructions if form.include_instruction  else [],
@@ -88,5 +107,4 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
         }
         control_flow_graphs.append(graph)
 
-    result: ResponseModel = {"cfgs": control_flow_graphs}
-    return result
+    return {"cfgs": control_flow_graphs}

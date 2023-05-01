@@ -7,6 +7,10 @@ def create_graphs(
         instrs: list[Instruction],
         valid_call_edges: list[tuple[int, int]],
     ) -> list[GraphNode]:
+    """
+    Returns a graph, i.e a list of nodes, where each node contains the first through last
+    instruction, the id of the function, as well as the id of all functions it calls
+    """
 
     # Assume first instruction is entry point, and take unique function prologues and sort them
     function_prologues = sorted({0} | {end for _, end in valid_call_edges})

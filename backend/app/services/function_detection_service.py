@@ -35,7 +35,10 @@ def filter_valid_call_edges(
           ret_opcode: int,
           potential_call_edges: list[tuple[int, int]],
           ret_func_dist: int) -> list[tuple[int, int]]:
-
+    """
+    Returns a list of edges (from_instruction, to_instruction) that are valid, i.e there is a
+    return instructions at most "ret_func_dist" before it.
+    """
     valid_call_edges = set()
     for from_edge, to_edge in potential_call_edges:
         is_first_instruction = to_edge == 0
@@ -49,7 +52,12 @@ def probability_of_valid_call_edges(
           len_valid_call_edges: int,
           len_potential_call_edges: int,
           call_count: int) -> float:
-     ratio_valid_call_edges: float = (len_valid_call_edges / call_count)
-     ratio_potential_call_edges: float = (len_potential_call_edges / call_count)
-     probability: float = ( (2 * ratio_valid_call_edges) + ratio_potential_call_edges) / 3
-     return probability
+    """
+    Returns a value between 0 and 1, representing the probability of the call and ret opcodes
+    being valid, based on the ratio of valid and potential edges and the number of instructions
+    with this call opcode
+    """
+    ratio_valid_call_edges: float = (len_valid_call_edges / call_count)
+    ratio_potential_call_edges: float = (len_potential_call_edges / call_count)
+    probability: float = ( (2 * ratio_valid_call_edges) + ratio_potential_call_edges) / 3
+    return probability

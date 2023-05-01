@@ -29,6 +29,11 @@ def extract_instructions(
         call_len: int,
         ret_len: int,
     ) -> list[Instruction]:
+    """
+    Extracts instructions from the binary string and maps it to the Instruction class.
+    The instruction inherits int, and its value is the instruction value itself.
+    It also contains attributes for the call opcode value, ret opcode value, and call operand value
+    """
 
     instruction_values: list[int] = _extract_instruction(binary, endiannes, instr_len)
     return [Instruction(e, instr_len, call_len, ret_len) for e in instruction_values]
@@ -39,6 +44,10 @@ def _extract_instruction(
         endiannes: str,
         instr_length: int,
     ) -> list[int]:
+    """
+    Internal extract instruction function, takes in the binary string and returns
+    a list of ints which represents the instruction values
+    """
 
     instructions: list[int] = []
 
@@ -88,18 +97,21 @@ def get_code_start_and_end(binary_file_len: int,
                            unknown_code_entry: bool,
                            file_offset: int,
                            file_offset_end: int) -> list[tuple[int, int]]:
+    """
+    Returns all the potential (file_offset, file_offset_end) combinations to iterate through
+    """
     result: list[tuple[int, int]] = []
     if unknown_code_entry:
-        for byte_index in range(instr_len // 8):
-            for start in range(0, 41, 2):
-                for end in range(60, 101, 2):
-                    start_offset: int = binary_file_len*start//100
-                    end_offset: int = binary_file_len*end//100
-                    while (start_offset % instr_len != byte_index) and start_offset > 0:
-                        start_offset -= 1
-                    result += [(start_offset, end_offset)]
+        for start in range(0, 41, 2):
+            for end in range(60, 101, 2):
+                start_offset: int = binary_file_len*start//100
+                end_offset: int = binary_file_len*end//100
+
+                result += [(int(start_offset // (instr_len / 8)),
+                            int(end_offset // (instr_len / 8)))]
     else:
-        result += [(file_offset, file_offset_end)]
+        result += [(int(file_offset // (instr_len / 8)),
+                    int(file_offset_end // (instr_len / 8)))]
 
     return result
 
@@ -108,6 +120,10 @@ def get_call_candidates_counter(
         instructions: list[Instruction],
         call_search_range: list[int],
     ) -> list[tuple[int, int]]:
+    """
+    Returns a Counter object containing all call opcodes in the range given, for the
+    list of instructions provided
+    """
 
     call_opcodes = [e.call_opcode for e in instructions]
     call_candidates = (Counter(call_opcodes)
@@ -119,7 +135,10 @@ def get_ret_candidates_counter(
         instructions: list[Instruction],
         ret_search_range: list[int],
     ) -> list[tuple[int, int]]:
-
+    """
+    Returns a Counter object containing all ret opcodes in the range given, for the
+    list of instructions provided
+    """
     ret_opcodes = [e.ret_opcode for e in instructions]
     ret_candidates = (Counter(ret_opcodes)
         .most_common(ret_search_range[1]+1)[ret_search_range[0]:])
