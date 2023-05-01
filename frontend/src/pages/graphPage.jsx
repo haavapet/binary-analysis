@@ -25,7 +25,7 @@ const GraphPage = () => {
     setActiveModalNode(null);
   }
 
-  if (graphData)
+  if (graphData && !(graphData.cfgs.length == 0))
     return (
       <>
         <ModalInfo
