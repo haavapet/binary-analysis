@@ -38,8 +38,9 @@ def filter_valid_call_edges(
 
     valid_call_edges = set()
     for from_edge, to_edge in potential_call_edges:
+        is_first_instruction = to_edge == 0
         for i in range(1, ret_func_dist + 1):
-            if instructions[to_edge - i].ret_opcode == ret_opcode:
+            if instructions[to_edge - i].ret_opcode == ret_opcode or is_first_instruction:
                 valid_call_edges.add((from_edge, to_edge))
     return list(valid_call_edges)
 
