@@ -3,8 +3,6 @@ from functools import reduce
 from operator import ior
 
 BYTE_LENGTH = 8
-MAX_INSTRUCTION_VALUE = 0xFFFFFFFFFFFFFFFF
-MAX_INSTRUCTION_LENGTH = 64
 
 class Instruction(int):
     def __new__(cls,
