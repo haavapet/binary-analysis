@@ -1,7 +1,7 @@
 from ..app.services.instruction_service import extract_instructions
 
 
-def test_extract_instruction() -> None:
+def test_extract_instructions() -> None:
     int_list = [0x37, 0x21, 0x16, 0x22]
 
     instructions = extract_instructions(bytes(int_list), "little", 32, 4, 16)
