@@ -125,7 +125,7 @@ def get_call_candidates_counter(
     list of instructions provided
     """
 
-    call_opcodes = [e.call_opcode for e in instructions]
+    call_opcodes = [e.call_opcode for e in instructions if e != 0]
     call_candidates = (Counter(call_opcodes)
         .most_common(call_search_range[1]+1)[call_search_range[0]:])
 
@@ -139,7 +139,7 @@ def get_ret_candidates_counter(
     Returns a list containing all ret opcodes and their count in the range given, for the
     list of instructions provided
     """
-    ret_opcodes = [e.ret_opcode for e in instructions]
+    ret_opcodes = [e.ret_opcode for e in instructions if e != 0]
     ret_candidates = (Counter(ret_opcodes)
         .most_common(ret_search_range[1]+1)[ret_search_range[0]:])
 
