@@ -42,20 +42,22 @@ const Graph = ({ graph, openModal }) => {
 
     render(inner, g);
 
-    // fit graph
-    const bounds = inner.node().getBBox();
-    const parent = inner.node().parentElement || inner.node().parentNode;
-    const fullWidth = parent.clientWidth || parent.parentNode.clientWidth;
-    const fullHeight = parent.clientHeight || parent.parentNode.clientHeight;
+    // fit graph if below a certain size
+    if (g["_nodeCount"] < 500) {
+      const bounds = inner.node().getBBox();
+      const parent = inner.node().parentElement || inner.node().parentNode;
+      const fullWidth = parent.clientWidth || parent.parentNode.clientWidth;
+      const fullHeight = parent.clientHeight || parent.parentNode.clientHeight;
 
-    var scale = 0.9 / Math.max(bounds.width / fullWidth, bounds.height / fullHeight);
-    var translate = [
-      fullWidth / 2 - scale * (bounds.x + bounds.width / 2),
-      fullHeight / 2 - scale * (bounds.y + bounds.height / 2),
-    ];
-    var transform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale);
+      var scale = 0.9 / Math.max(bounds.width / fullWidth, bounds.height / fullHeight);
+      var translate = [
+        fullWidth / 2 - scale * (bounds.x + bounds.width / 2),
+        fullHeight / 2 - scale * (bounds.y + bounds.height / 2),
+      ];
+      var transform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale);
 
-    svg.transition().duration(1000).call(zoom.transform, transform);
+      svg.transition().duration(1000).call(zoom.transform, transform);
+    }
 
     // add on node click to return original node
     svg.selectAll("g.node").on("click", (e) => openModal(graph.find((node) => node.f_id == e.target.__data__)));
