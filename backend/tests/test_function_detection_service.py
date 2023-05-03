@@ -44,11 +44,11 @@ def test_potential_call_edges() -> None:
     instructions = [Instruction(0x0000, 16, 4, 4),
                      Instruction(0x0000, 16, 4, 4),
                      Instruction(0x2000, 16, 4, 4)]
-    assert find_potential_call_edges(instructions, 0x2000, 1, 0) == [(2, 0)]
+    assert find_potential_call_edges(instructions, 0x2000, 1, 0, False) == [(2, 0)]
 
     # no potential calls
     instructions = [Instruction(0x0000, 16, 4, 4),
                      Instruction(0x0000, 16, 4, 4),
                      Instruction(0x0000, 16, 4, 4)]
-    assert find_potential_call_edges(instructions, 0x2000, 1, 0) == []
+    assert find_potential_call_edges(instructions, 0x2000, 1, 0, False) == []
 

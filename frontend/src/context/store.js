@@ -21,6 +21,7 @@ const initialState = {
     nrCandidates: null,
     unknownCodeEntry: false,
     includeInstructions: true,
+    isRelativeAddressing: false,
   },
 };
 

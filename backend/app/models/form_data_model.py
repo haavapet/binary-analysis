@@ -41,6 +41,7 @@ class FormDataModel(FormBaseModel):
     ret_func_dist: int = Field(alias="returnToFunctionPrologueDistance")
     unknown_code_entry: bool = Field(alias="unknownCodeEntry")
     include_instruction: bool = Field(alias="includeInstructions")
+    is_relative_addressing: bool = Field(alias="isRelativeAddressing")
     file: UploadFile = Field(alias="file")
 
 

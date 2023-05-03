@@ -65,7 +65,8 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
                 potential_call_edges = find_potential_call_edges(current_instructions,
                                                                  call_opcode,
                                                                  form.pc_inc,
-                                                                 form.pc_offset)
+                                                                 form.pc_offset,
+                                                                 form.is_relative_addressing)
 
                 # Iterate over possible ret candidates based on the range provided
                 for ret_opcode, _ in get_ret_candidates_counter(current_instructions,

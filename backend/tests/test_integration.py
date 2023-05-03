@@ -23,6 +23,7 @@ def test_integration() -> None:
             "nrCandidates": "1",
             "unknownCodeEntry": "False",
             "includeInstructions": "False",
+            "isRelativeAddressing": "False",
         }
 
     filename = '../binaries/quar.ch8'
