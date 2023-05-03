@@ -52,7 +52,6 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
                                             form.instr_len,
                                             form.call_len,
                                             form.ret_len)
-
         # Iterate over all possible file offsets
         for start, end in possible_code_start_end:
 
@@ -62,7 +61,6 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
             # Iterate over possible call candidates based on the range provided
             for call_opcode, call_count in get_call_candidates_counter(current_instructions,
                                                                        form.call_search_range):
-
                 # Find potential edges for the call instructions
                 potential_call_edges = find_potential_call_edges(current_instructions,
                                                                  call_opcode,
@@ -80,8 +78,8 @@ async def root(form: FormDataModel = Depends(FormDataModel.as_form)) -> Response
                                                                form.ret_func_dist)
 
                     # Calculate probability of this combination of call and ret being correct
-                    probability = probability_of_valid_call_edges(len(potential_call_edges),
-                                                                  len(valid_call_edges),
+                    probability = probability_of_valid_call_edges(len(valid_call_edges),
+                                                                  len(potential_call_edges),
                                                                   call_count)
 
                     # Add to the heap
