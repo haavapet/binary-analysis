@@ -64,7 +64,7 @@ def _extract_instruction(
         instruction_bits: list[int] = list(binary[start:end + 1])
 
         # If overflow (i.e last instruction has fewer than instr_len bits) then pad empty bytes
-        if len(instruction_bits) != end - start + 1:
+        if len(instruction_bits) != end - start + 1 and j+instr_length > len(binary) * BYTE_LENGTH:
             overflow_bits = j + instr_length - len(binary) * BYTE_LENGTH
             overflow_bytes = (overflow_bits // BYTE_LENGTH)
             overflow_aligned_byte = (overflow_bits % BYTE_LENGTH == 0)
