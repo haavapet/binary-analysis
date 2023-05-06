@@ -60,9 +60,9 @@ def _find_potential_call_edges_relative(
     """
     # int to signed integer
     def itosi(x: int, num_bits: int) -> int:
-        f = ~((1 << (num_bits-1)) - 1)
-        if (x and f):
-            x = x | f
+        f = ((1 << (num_bits-1)) - 1)
+        if (x > f):
+            x = x | ~f
         return x
 
     valid_call_edges: list[tuple[int, int]] = []
