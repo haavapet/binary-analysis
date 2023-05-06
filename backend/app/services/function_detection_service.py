@@ -9,6 +9,7 @@ def find_potential_call_edges(
         pc_inc: int,
         pc_offset: int,
         is_relative: bool,
+        call_operand_len: int,
     ) -> list[tuple[int, int]]:
      """
     Returns a list of edges (from_instruction, to_instruction) for a call candidate
@@ -18,7 +19,8 @@ def find_potential_call_edges(
      if is_relative:
           return _find_potential_call_edges_relative(instructions,
                                                      call_candidate,
-                                                     pc_inc)
+                                                     pc_inc,
+                                                     call_operand_len)
      else:
           return _find_potential_call_edges_absolute(instructions,
                                                      call_candidate,
@@ -53,18 +55,17 @@ def _find_potential_call_edges_relative(
         instructions: list[Instruction],
         call_candidate: int,
         pc_inc: int,
+        call_operand_len: int,
     ) -> list[tuple[int, int]]:
     """
     This finds call edges assuming that the call operand is a relative address,
     """
     # int to signed integer
-    def itosi(uintval: int) -> int:
-        val = hex(uintval)
-        uintval = int(val,16)
-        bits = 4 * (len(val) - 2)
-        if uintval >= math.pow(2,bits-1):
-            uintval = int(0 - (math.pow(2,bits) - uintval))
-        return uintval
+    def itosi(x: int, num_bits: int) -> int:
+        f = ~((1 << (num_bits-1)) - 1)
+        if (x and f):
+            x = x | f
+        return x
 
     valid_call_edges: list[tuple[int, int]] = []
 
@@ -72,7 +73,7 @@ def _find_potential_call_edges_relative(
         # call opcode is the call candidate,
         # and call operand adresses a valid pc counter
         # and the pc counter it addresses is not outside the length of instructions we have
-        signed_operand = itosi(e.call_operand)
+        signed_operand = itosi(e.call_operand, call_operand_len)
         if (e.call_opcode == call_candidate
             and 0 <= (address := (int(signed_operand / pc_inc) + i)) < len(instructions)):
                 valid_call_edges += [(i, address)]
