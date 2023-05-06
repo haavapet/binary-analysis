@@ -26,7 +26,7 @@ def test_integration() -> None:
             "isRelativeAddressing": "False",
         }
 
-    filename = '../binaries/quar.ch8'
+    filename = '../binaries/chipquarium.ch8'
     with open(filename, "rb") as f:
         filebody = f.read()
 
