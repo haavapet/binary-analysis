@@ -73,7 +73,8 @@ def _find_potential_call_edges_relative(
         # and the pc counter it addresses is not outside the length of instructions we have
         signed_operand = itosi(e.call_operand, call_operand_len)
         if (e.call_opcode == call_candidate
-            and 0 <= (address := (int(signed_operand / pc_inc) + i)) < len(instructions)):
+            and 0 <= (address := (int(signed_operand / pc_inc) + i)) < len(instructions)
+            and abs(i - address) > 4):
                 valid_call_edges += [(i, address)]
 
     return valid_call_edges
