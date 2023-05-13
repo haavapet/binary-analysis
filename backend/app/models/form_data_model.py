@@ -24,13 +24,13 @@ class FormDataModel(FormBaseModel):
                                                     to be between the x and y most
                                                     popular instructions
         ret_func_dist (int): (class attribute) Distance from function prologue to prvious ret
-        unknownCodeEntry (bool): (class attribute) Search the binary for the most optimal 
-                                                   fileOffset and fileOffsetEnd, 
+        unknownCodeEntry (bool): (class attribute) Search the binary for the most optimal
+                                                   fileOffset and fileOffsetEnd,
                                                    drastically increases runtime
-        includeInstructions (bool): (class attribute) Include instructions in result object. 
-                                                      Recommended False for big binaries 
+        includeInstructions (bool): (class attribute) Include instructions in result object.
+                                                      Recommended False for big binaries
                                                       if rendering graph
-        isRelativeAddressing (bool): (class attribute) Relative or absolute addressing 
+        isRelativeAddressing (bool): (class attribute) Relative or absolute addressing
                                                        for call operands
         file (UploadFile): (class attribute) Binary file to be analysed
         binary_data (bytes): (class attribute) Bytes of code section of binary file
