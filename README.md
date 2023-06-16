@@ -7,7 +7,7 @@ prerequisites: docker, docker-compose
 
 ```
 // navigate to root folder
-$  sudo docker-compose up --build
+$  sudo docker compose up --build
 ```
 
 Navigate to localhost:8000 to view the frontend, use the quar.ch8 file in root as an example file
